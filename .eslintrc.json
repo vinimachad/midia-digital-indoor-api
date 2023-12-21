@@ -1,0 +1,54 @@
+{
+  "env": {
+    "es2021": true,
+    "node": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "prettier"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "plugins": [
+    "prettier"
+  ],
+  "rules": {
+    "prettier/prettier": "error"
+  },
+  "settings": {
+    "import/resolver": {
+      "alias": [
+        [
+          "@controllers",
+          "./src/controllers"
+        ],
+        [
+          "@routes",
+          "./src/routes"
+        ],
+        [
+          "@usecases",
+          "./src/use-cases"
+        ],
+        [
+          "@entities",
+          "./src/entities"
+        ],
+        [
+          "@configs",
+          "./src/config"
+        ],
+        [
+          "@repositories",
+          "./src/repositories"
+        ],
+        [
+          "@middlewares",
+          "./src/middlewares"
+        ]
+      ]
+    }
+  }
+}
