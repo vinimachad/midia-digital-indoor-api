@@ -1,17 +1,8 @@
-import { it } from 'node:test'
+import { News } from 'models/news-model'
 import Parser from 'rss-parser'
-import { z } from 'zod'
 
 export interface IGetTourismRssUseCase {
   execute()
-}
-
-export type News = {
-  type: string
-  title: string
-  image_url: string
-  delay: number
-  qrcode: string
 }
 
 export default class GetTourismRssUseCase implements IGetTourismRssUseCase {
