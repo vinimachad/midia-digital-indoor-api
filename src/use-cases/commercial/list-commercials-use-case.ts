@@ -23,6 +23,7 @@ export default class ListCommercialsUseCase implements IListCommercialsUseCase {
 
     let maxLength = Math.max(news.length, weatherData.length)
     let data: Commercial[] = []
+
     for (let i = 0; i < maxLength; i++) {
       let newsPost = news[i % news.length]
       let weather = weatherData[i % weatherData.length]

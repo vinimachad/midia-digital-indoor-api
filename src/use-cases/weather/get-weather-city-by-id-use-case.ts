@@ -17,6 +17,7 @@ export type WeatherRequest = {
 }
 
 export type ForecastRequest = {
+  index: number
   date: string
   max: string
   min: string
@@ -63,8 +64,9 @@ export default class GetWeatherCityByIdUseCase
   }
 
   private formatForecast(data: Forecast[]): ForecastRequest[] {
-    return data.map((item) => {
+    return data.map((item, index) => {
       return {
+        index,
         condition: `https://assets.hgbrasil.com/weather/icons/conditions/${item.condition}.svg`,
         max: `Máxima de ${item.max}º C`,
         min: `Mínima de ${item.min}º C`,

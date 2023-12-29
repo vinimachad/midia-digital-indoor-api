@@ -45,6 +45,7 @@ model Weather {
 
 model Forecast {
   id          String   @id @default(uuid())
+  index       Int
   date        String
   weekday     String
   max         String

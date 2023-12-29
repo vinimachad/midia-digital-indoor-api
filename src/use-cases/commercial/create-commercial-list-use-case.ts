@@ -4,8 +4,6 @@ import ScrapJovemPanLatestNewsUseCase, {
 import GetWeatherCitiesUseCase, {
   IGetWeatherCitiesUseCase
 } from '@usecases/weather/get-weather-cities-use-case'
-import { WeatherRequest } from '@usecases/weather/get-weather-city-by-id-use-case'
-import { News } from 'models/news-model'
 import CreateNewsUseCase, {
   ICreateNewsUseCase
 } from './news/create-news-use-case'
@@ -40,10 +38,7 @@ export default class CreateCommercialListUseCase
 
       if (i < weatherData.length) {
         let weather = weatherData[i]
-        await this.createWeatherUseCase.execute({
-          ...weather,
-          forecast: { createMany: { data: weather.forecast } }
-        })
+        await this.createWeatherUseCase.execute(weather)
       }
     }
   }

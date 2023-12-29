@@ -8,12 +8,12 @@ export interface IGetWeatherCitiesUseCase {
 }
 
 enum CitiesIds {
-  CAMPO_GRANDE = '26804347'
-  // CORUMBA = '455947',
-  // AQUIDAUANA = '456043',
-  // MIRANDA = '456335',
-  // COXIM = '457088',
-  // SAO_PAULO = '455827'
+  CAMPO_GRANDE = '26804347',
+  CORUMBA = '455947',
+  AQUIDAUANA = '456043',
+  MIRANDA = '456335',
+  COXIM = '457088',
+  SAO_PAULO = '455827'
 }
 
 export default class GetWeatherCitiesUseCase

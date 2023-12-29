@@ -12,7 +12,9 @@ export default class WeatherRepository implements IWeatherRepository {
   constructor(private client: PrismaClient = prismaClient) {}
 
   async list(): Promise<Weather[]> {
-    return await this.client.weather.findMany({ include: { forecast: true } })
+    return await this.client.weather.findMany({
+      include: { forecast: { take: 4, orderBy: { index: 'asc' } } }
+    })
   }
 
   async create(data: Prisma.WeatherCreateInput) {

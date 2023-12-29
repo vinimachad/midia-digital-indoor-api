@@ -50,6 +50,14 @@ export default class ScrapJovemPanLatestNewsUseCase {
 
     if (!link || !image_url) return
 
-    return { id: link, type: 'JPan', title, image_url, delay: 20, qrcode }
+    const pattern = /https:\/\/[^\/]+\/([^\.]+)\.html/
+    const result = link.match(pattern)
+    let id = link
+
+    if (result) {
+      id = result[1].replace('/', '-')
+    }
+
+    return { id, type: 'JPan', title, image_url, delay: 20, qrcode }
   }
 }
