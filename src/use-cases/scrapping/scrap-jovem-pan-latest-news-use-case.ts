@@ -55,7 +55,7 @@ export default class ScrapJovemPanLatestNewsUseCase {
     let id = link
 
     if (result) {
-      id = result[1].replace('/', '-')
+      id = result[1].replaceAll('/', '-')
     }
 
     return { id, type: 'JPan', title, image_url, delay: 20, qrcode }
