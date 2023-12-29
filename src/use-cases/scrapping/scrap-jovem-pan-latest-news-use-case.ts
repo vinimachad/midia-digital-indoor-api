@@ -50,6 +50,6 @@ export default class ScrapJovemPanLatestNewsUseCase {
 
     if (!link || !image_url) return
 
-    return { type: 'JPan', title, image_url, delay: 20, qrcode }
+    return { id: link, type: 'JPan', title, image_url, delay: 20, qrcode }
   }
 }

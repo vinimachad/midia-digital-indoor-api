@@ -11,8 +11,52 @@ datasource db {
 }
 
 model Commercial {
-  id           String   @id @default(uuid())
-  url          String
-  time_seconds Int
-  created_at   DateTime @default(now())
+  id         String   @id @default(uuid())
+  news       News?    @relation(fields: [newsId], references: [id])
+  weather    Weather? @relation(fields: [weatherId], references: [id])
+  newsId     String?
+  weatherId  String?
+  created_at DateTime @default(now())
+}
+
+model News {
+  id         String       @id
+  type       String
+  title      String
+  image_url  String
+  qrcode     String
+  delay      Int
+  created_at DateTime     @default(now())
+  Commercial Commercial[]
+}
+
+model Weather {
+  id             String       @id
+  temp           Int
+  date           String
+  condition_code String
+  description    String
+  currently      String
+  city           String
+  img_id         String
+  sunrise        String
+  sunset         String
+  condition_slug String
+  city_name      String
+  created_at     DateTime     @default(now())
+  forecast       Forecast[]
+  Commercial     Commercial[]
+}
+
+model Forecast {
+  id          String   @id @default(uuid())
+  date        String
+  weekday     String
+  max         Int
+  min         Int
+  description String
+  condition   String
+  created_at  DateTime @default(now())
+  Weather     Weather? @relation(fields: [weatherId], references: [id])
+  weatherId   String?
 }

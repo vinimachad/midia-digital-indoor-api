@@ -1,11 +1,10 @@
 import { prismaClient } from '@configs/prisma'
-import { CommercialModel } from '@entities/commercial'
-import { PrismaClient } from '@prisma/client'
+import { Commercial, Prisma, PrismaClient } from '@prisma/client'
 
 export interface ICommercialRepository {
   list()
   findById(id: string)
-  create(data: CommercialModel)
+  create(data: Prisma.CommercialCreateInput)
 }
 
 export default class CommercialRepository implements ICommercialRepository {
@@ -19,7 +18,7 @@ export default class CommercialRepository implements ICommercialRepository {
     return await this.client.commercial.findUnique({ where: { id } })
   }
 
-  async create(data: CommercialModel) {
+  async create(data: Prisma.CommercialCreateInput) {
     await this.client.commercial.create({ data })
   }
 }
