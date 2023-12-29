@@ -32,13 +32,8 @@ model News {
 
 model Weather {
   id             String       @id
-  temp           Int
-  date           String
-  condition_code String
+  temp           String
   description    String
-  currently      String
-  city           String
-  img_id         String
   sunrise        String
   sunset         String
   condition_slug String
@@ -52,8 +47,8 @@ model Forecast {
   id          String   @id @default(uuid())
   date        String
   weekday     String
-  max         Int
-  min         Int
+  max         String
+  min         String
   description String
   condition   String
   created_at  DateTime @default(now())

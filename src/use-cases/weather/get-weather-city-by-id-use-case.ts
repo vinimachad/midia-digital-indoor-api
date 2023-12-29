@@ -6,6 +6,7 @@ export interface IGetWeatherCityByIdUseCase {
 }
 
 export type WeatherRequest = {
+  id: string
   city_name: string
   sunrise: string
   sunset: string
@@ -20,6 +21,8 @@ export type ForecastRequest = {
   max: string
   min: string
   condition: string
+  description: string
+  weekday: string
 }
 
 export default class GetWeatherCityByIdUseCase
@@ -41,6 +44,7 @@ export default class GetWeatherCityByIdUseCase
       } = response.data.results
 
       return {
+        id: city_id,
         city_name,
         sunrise,
         sunset,
@@ -64,7 +68,9 @@ export default class GetWeatherCityByIdUseCase
         condition: `https://assets.hgbrasil.com/weather/icons/conditions/${item.condition}.svg`,
         max: `Máxima de ${item.max}º C`,
         min: `Mínima de ${item.min}º C`,
-        date: `${item.weekday} - ${item.date}`
+        date: `${item.weekday} - ${item.date}`,
+        weekday: item.weekday,
+        description: item.description
       }
     })
   }

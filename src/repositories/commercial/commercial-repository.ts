@@ -2,7 +2,7 @@ import { prismaClient } from '@configs/prisma'
 import { Commercial, Prisma, PrismaClient } from '@prisma/client'
 
 export interface ICommercialRepository {
-  list()
+  list(): Promise<Commercial[]>
   findById(id: string)
   create(data: Prisma.CommercialCreateInput)
 }
@@ -11,7 +11,9 @@ export default class CommercialRepository implements ICommercialRepository {
   constructor(private client: PrismaClient = prismaClient) {}
 
   async list() {
-    return await this.client.commercial.findMany()
+    return await this.client.commercial.findMany({
+      include: { news: true, weather: true }
+    })
   }
 
   async findById(id: string) {

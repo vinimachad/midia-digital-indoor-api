@@ -9,6 +9,9 @@ import { News } from 'models/news-model'
 import CreateNewsUseCase, {
   ICreateNewsUseCase
 } from './news/create-news-use-case'
+import CreateWeatherUseCase, {
+  ICreateWeatherUseCase
+} from './weather/create-weather-use-case'
 
 export interface ICreateCommercialListUseCase {
   execute()
@@ -20,27 +23,28 @@ export default class CreateCommercialListUseCase
   constructor(
     private getWeatherCitiesUseCase: IGetWeatherCitiesUseCase = new GetWeatherCitiesUseCase(),
     private scrapJovemPanLatestNewsUseCase: IScrapJovemPanLatestNewsUseCase = new ScrapJovemPanLatestNewsUseCase(),
-    private createNewsUseCase: ICreateNewsUseCase = new CreateNewsUseCase()
+    private createNewsUseCase: ICreateNewsUseCase = new CreateNewsUseCase(),
+    private createWeatherUseCase: ICreateWeatherUseCase = new CreateWeatherUseCase()
   ) {}
 
   async execute() {
     const weatherData = await this.getWeatherCitiesUseCase.execute()
     const jpNews = await this.scrapJovemPanLatestNewsUseCase.execute()
-    return await this.buildCommercialList(jpNews, weatherData)
-  }
 
-  private async buildCommercialList(
-    news: News[],
-    weatherData: WeatherRequest[]
-  ) {
-    let maxLength = Math.max(news.length, weatherData.length)
-    let data: { news?: News; weather?: WeatherRequest }[] = []
+    let maxLength = Math.max(jpNews.length, weatherData.length)
+
     for (let i = 0; i < maxLength; i++) {
-      let newsPost = news[i % news.length]
-      await this.createNewsUseCase.execute(newsPost)
-      data.push({ news: news[i % news.length] })
-      data.push({ weather: weatherData[i % weatherData.length] })
+      if (i < jpNews.length) {
+        await this.createNewsUseCase.execute(jpNews[i])
+      }
+
+      if (i < weatherData.length) {
+        let weather = weatherData[i]
+        await this.createWeatherUseCase.execute({
+          ...weather,
+          forecast: { createMany: { data: weather.forecast } }
+        })
+      }
     }
-    return data
   }
 }

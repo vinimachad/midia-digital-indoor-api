@@ -6,11 +6,15 @@ import PreProcessImagesUseCase, {
 import CreateCommercialListUseCase, {
   ICreateCommercialListUseCase
 } from '@usecases/commercial/create-commercial-list-use-case'
+import ListCommercialsUseCase, {
+  IListCommercialsUseCase
+} from '@usecases/commercial/list-commercials-use-case'
 
 export default class CommercialController {
   constructor(
     private preProcessImageUseCase: IPreProcessImagesUseCase = new PreProcessImagesUseCase(),
-    private createCommercialListUseCase: ICreateCommercialListUseCase = new CreateCommercialListUseCase()
+    private createCommercialListUseCase: ICreateCommercialListUseCase = new CreateCommercialListUseCase(),
+    private listCommercialsUseCase: IListCommercialsUseCase = new ListCommercialsUseCase()
   ) {}
 
   async create(req: Request, res: Response) {
@@ -24,7 +28,12 @@ export default class CommercialController {
   }
 
   async list(req: Request, res: Response) {
-    let results = await this.createCommercialListUseCase.execute()
-    res.json({ results })
+    let results = await this.listCommercialsUseCase.execute()
+    res.status(200).json({ results })
+  }
+
+  async update(req: Request, res: Response) {
+    await this.createCommercialListUseCase.execute()
+    res.status(204).json()
   }
 }
