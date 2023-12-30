@@ -1,25 +1,46 @@
-import { Commercial, Prisma } from '@prisma/client'
 import CommercialRepository, {
   ICommercialRepository
 } from '@repositories/commercial/commercial-repository'
-
-// type CommercialRequest = {
-//   file?: Express.Multer.File
-//   time_seconds: number
-// }
+import { WeatherRequest } from '@usecases/weather/get-weather-city-by-id-use-case'
+import { News } from 'models/news-model'
+import CreateWeatherUseCase, {
+  ICreateWeatherUseCase
+} from './weather/create-weather-use-case'
 
 export interface ICreateCommercialUseCase {
-  execute(data: Prisma.CommercialCreateInput): Promise<void>
+  execute(weather: WeatherRequest, news: News): Promise<void>
 }
 
 export default class CreateCommercialUseCase
   implements ICreateCommercialUseCase
 {
   constructor(
+    private createWeatherUseCase: ICreateWeatherUseCase = new CreateWeatherUseCase(),
     private commercialRepository: ICommercialRepository = new CommercialRepository()
   ) {}
 
-  async execute(data: Prisma.CommercialCreateInput) {
-    await this.commercialRepository.create(data)
+  async execute(weather: WeatherRequest, news: News) {
+    let existsCommercial = await this.commercialRepository.findByNewsId(news.id)
+
+    let updatedOrCreatedWeather =
+      await this.createWeatherUseCase.execute(weather)
+
+    if (existsCommercial) {
+      await this.commercialRepository.update(existsCommercial.id, {
+        weather: {
+          update: updatedOrCreatedWeather,
+          connectOrCreate: {
+            where: { id: updatedOrCreatedWeather.id },
+            create: updatedOrCreatedWeather
+          }
+        }
+      })
+      return
+    }
+
+    await this.commercialRepository.create({
+      news: { create: news },
+      weather: { connect: { id: updatedOrCreatedWeather.id } }
+    })
   }
 }

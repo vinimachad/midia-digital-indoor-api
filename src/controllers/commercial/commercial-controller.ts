@@ -28,7 +28,10 @@ export default class CommercialController {
   }
 
   async list(req: Request, res: Response) {
-    let results = await this.listCommercialsUseCase.execute()
+    let page = Number(req.query.page)
+    let limit = Number(req.query.limit)
+
+    let results = await this.listCommercialsUseCase.execute(page, limit)
     res.status(200).json({ results })
   }
 

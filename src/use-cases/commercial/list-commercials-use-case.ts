@@ -1,36 +1,49 @@
 import CommercialRepository, {
   ICommercialRepository
 } from '@repositories/commercial/commercial-repository'
-import ListNewsUseCase, { IListNewsUseCase } from './news/list-news-use-case'
-import ListWeatherUseCase, {
-  IListWeatherUseCase
-} from './weather/list-weather-use-case'
-import { Commercial } from 'models/commercial'
+
+export type CommercialsPaginated = {
+  totalPages: number
+  currentPage: number
+  previous?: number
+  next?: {
+    page: number
+    limit: number
+  }
+  data: any[]
+}
 
 export interface IListCommercialsUseCase {
-  execute(): Promise<Commercial[]>
+  execute(skip: number, take: number): Promise<CommercialsPaginated>
 }
 
 export default class ListCommercialsUseCase implements IListCommercialsUseCase {
   constructor(
-    private listNewsUseCase: IListNewsUseCase = new ListNewsUseCase(),
-    private listWeatherUseCase: IListWeatherUseCase = new ListWeatherUseCase()
+    private commercialRepository: ICommercialRepository = new CommercialRepository()
   ) {}
 
-  async execute() {
-    let news = await this.listNewsUseCase.execute()
-    let weatherData = await this.listWeatherUseCase.execute()
+  async execute(page: number, limit: number): Promise<CommercialsPaginated> {
+    const totalCommercials = await this.commercialRepository.count()
+    const totalPages = Math.ceil(totalCommercials / limit)
+    const skip = (page - 1) * limit
+    const take = page * limit
+    let previous = page === 1 ? undefined : page - 1
+    let next =
+      page === totalPages
+        ? undefined
+        : {
+            page: page + 1,
+            limit
+          }
 
-    let maxLength = Math.max(news.length, weatherData.length)
-    let data: Commercial[] = []
+    const data = await this.commercialRepository.list(skip, take)
 
-    for (let i = 0; i < maxLength; i++) {
-      let newsPost = news[i % news.length]
-      let weather = weatherData[i % weatherData.length]
-      data.push({ news: newsPost })
-      data.push({ weather })
+    return {
+      totalPages,
+      currentPage: page,
+      previous,
+      next,
+      data
     }
-
-    return data
   }
 }

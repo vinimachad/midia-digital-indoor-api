@@ -13,6 +13,6 @@ export default class UpdateWeatherUseCase implements IUpdateWeatherUseCase {
   ) {}
 
   async execute(data: Prisma.WeatherCreateInput) {
-    await this.repository.update(data.id, data)
+    return await this.repository.update(data.id, data)
   }
 }

@@ -11,12 +11,12 @@ datasource db {
 }
 
 model Commercial {
-  id         String   @id @default(uuid())
-  news       News?    @relation(fields: [newsId], references: [id])
-  weather    Weather? @relation(fields: [weatherId], references: [id])
-  newsId     String?
-  weatherId  String?
-  created_at DateTime @default(now())
+  id        String   @id @default(uuid())
+  news      News?    @relation(fields: [newsId], references: [id])
+  weather   Weather? @relation(fields: [weatherId], references: [id])
+  newsId    String?
+  weatherId String?
+  createdAt DateTime @default(now())
 }
 
 model News {
@@ -26,7 +26,7 @@ model News {
   image_url  String
   qrcode     String
   delay      Int
-  created_at DateTime     @default(now())
+  createdAt  DateTime     @default(now())
   Commercial Commercial[]
 }
 
