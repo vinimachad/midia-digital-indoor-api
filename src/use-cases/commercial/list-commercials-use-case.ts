@@ -26,7 +26,7 @@ export default class ListCommercialsUseCase implements IListCommercialsUseCase {
     const totalCommercials = await this.commercialRepository.count()
     const totalPages = Math.ceil(totalCommercials / limit)
     const skip = (page - 1) * limit
-    const take = page * limit
+    const endIndex = page * limit
     let previous = page === 1 ? undefined : page - 1
     let next =
       page === totalPages
@@ -36,7 +36,7 @@ export default class ListCommercialsUseCase implements IListCommercialsUseCase {
             limit
           }
 
-    const data = await this.commercialRepository.list(skip, take)
+    const data = await this.commercialRepository.list(skip, limit)
 
     return {
       totalPages,

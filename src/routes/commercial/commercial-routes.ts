@@ -5,7 +5,7 @@ import { Router } from 'express'
 const commercialController = new CommercialController()
 const commercialRoutes = Router()
 
-commercialRoutes.patch('/update', (req, res) =>
+commercialRoutes.put('/update', (req, res) =>
   commercialController.update(req, res)
 )
 commercialRoutes.post('/create', upload.single('file'), (req, res) =>
