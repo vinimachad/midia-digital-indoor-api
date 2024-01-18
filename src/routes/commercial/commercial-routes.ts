@@ -8,7 +8,7 @@ const commercialRoutes = Router()
 commercialRoutes.put('/update', (req, res) =>
   commercialController.update(req, res)
 )
-commercialRoutes.post('/create', upload.single('file'), (req, res) =>
+commercialRoutes.post('/create/banner', upload.single('file'), (req, res) =>
   commercialController.create(req, res)
 )
 commercialRoutes.get('/list', (req, res) => commercialController.list(req, res))

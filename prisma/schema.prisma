@@ -10,37 +10,26 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Commercial {
-  id        String   @id @default(uuid())
-  news      News?    @relation(fields: [newsId], references: [id])
-  weather   Weather? @relation(fields: [weatherId], references: [id])
-  newsId    String?
-  weatherId String?
+model News {
+  id        String   @id
+  type      String
+  title     String
+  image_url String
+  qrcode    String
+  delay     Int
   createdAt DateTime @default(now())
 }
 
-model News {
-  id         String       @id
-  type       String
-  title      String
-  image_url  String
-  qrcode     String
-  delay      Int
-  createdAt  DateTime     @default(now())
-  Commercial Commercial[]
-}
-
 model Weather {
-  id             String       @id
+  id             String     @id
   temp           String
   description    String
   sunrise        String
   sunset         String
   condition_slug String
   city_name      String
-  created_at     DateTime     @default(now())
+  created_at     DateTime   @default(now())
   forecast       Forecast[]
-  Commercial     Commercial[]
 }
 
 model Forecast {
@@ -55,4 +44,9 @@ model Forecast {
   created_at  DateTime @default(now())
   Weather     Weather? @relation(fields: [weatherId], references: [id])
   weatherId   String?
+}
+
+model Banner {
+  id  String @id @default(uuid())
+  url String
 }

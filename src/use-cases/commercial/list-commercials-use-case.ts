@@ -1,6 +1,16 @@
-import CommercialRepository, {
-  ICommercialRepository
-} from '@repositories/commercial/commercial-repository'
+import NewsRepository, {
+  INewsRepository
+} from '@repositories/commercial/news-repository'
+import ListWeatherUseCase, {
+  IListWeatherUseCase
+} from './weather/list-weather-use-case'
+import BannerRepository, {
+  IBannerRepository
+} from '@repositories/commercial/banner-repository'
+import CreateCommercialUseCase, {
+  ICreateCommercialUseCase
+} from './create-commercial-use-case'
+import { skip } from 'node:test'
 
 export type CommercialsPaginated = {
   totalPages: number
@@ -19,11 +29,25 @@ export interface IListCommercialsUseCase {
 
 export default class ListCommercialsUseCase implements IListCommercialsUseCase {
   constructor(
-    private commercialRepository: ICommercialRepository = new CommercialRepository()
+    private newsRepository: INewsRepository = new NewsRepository(),
+    private createCommercialUseCase: ICreateCommercialUseCase = new CreateCommercialUseCase()
   ) {}
 
   async execute(page: number, limit: number): Promise<CommercialsPaginated> {
-    const totalCommercials = await this.commercialRepository.count()
+    let pagination = await this.paginate(page, limit)
+
+    const data = await this.createCommercialUseCase.execute(
+      pagination.skip,
+      limit
+    )
+    return {
+      ...pagination,
+      data
+    }
+  }
+
+  private async paginate(page: number, limit: number) {
+    const totalCommercials = await this.newsRepository.count()
     const totalPages = Math.ceil(totalCommercials / limit)
     const skip = (page - 1) * limit
     const endIndex = page * limit
@@ -36,14 +60,12 @@ export default class ListCommercialsUseCase implements IListCommercialsUseCase {
             limit
           }
 
-    const data = await this.commercialRepository.list(skip, limit)
-
     return {
+      skip,
       totalPages,
       currentPage: page,
       previous,
-      next,
-      data
+      next
     }
   }
 }

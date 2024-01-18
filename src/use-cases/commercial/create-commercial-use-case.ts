@@ -1,46 +1,38 @@
-import CommercialRepository, {
-  ICommercialRepository
-} from '@repositories/commercial/commercial-repository'
-import { WeatherRequest } from '@usecases/weather/get-weather-city-by-id-use-case'
-import { News } from 'models/news-model'
-import CreateWeatherUseCase, {
-  ICreateWeatherUseCase
-} from './weather/create-weather-use-case'
+import BannerRepository, {
+  IBannerRepository
+} from '@repositories/commercial/banner-repository'
+import ListWeatherUseCase, {
+  IListWeatherUseCase
+} from './weather/list-weather-use-case'
+import NewsRepository, {
+  INewsRepository
+} from '@repositories/commercial/news-repository'
+import { Commercial } from 'models/commercial'
 
 export interface ICreateCommercialUseCase {
-  execute(weather: WeatherRequest, news: News): Promise<void>
+  execute(skip: number, limit: number): Promise<Commercial[]>
 }
 
 export default class CreateCommercialUseCase
   implements ICreateCommercialUseCase
 {
   constructor(
-    private createWeatherUseCase: ICreateWeatherUseCase = new CreateWeatherUseCase(),
-    private commercialRepository: ICommercialRepository = new CommercialRepository()
+    private newsRepository: INewsRepository = new NewsRepository(),
+    private bannerRepository: IBannerRepository = new BannerRepository(),
+    private listWeatherUseCase: IListWeatherUseCase = new ListWeatherUseCase()
   ) {}
 
-  async execute(weather: WeatherRequest, news: News) {
-    let existsCommercial = await this.commercialRepository.findByNewsId(news.id)
+  async execute(skip: number, limit: number) {
+    var data: Commercial[] = []
+    let news = await this.newsRepository.listWithPagination(skip, limit)
+    let banners = await this.bannerRepository.list()
+    let weathers = await this.listWeatherUseCase.execute()
 
-    let updatedOrCreatedWeather =
-      await this.createWeatherUseCase.execute(weather)
-
-    if (existsCommercial) {
-      await this.commercialRepository.update(existsCommercial.id, {
-        weather: {
-          update: updatedOrCreatedWeather,
-          connectOrCreate: {
-            where: { id: updatedOrCreatedWeather.id },
-            create: updatedOrCreatedWeather
-          }
-        }
-      })
-      return
+    for (let i = 0; i < news.length; i++) {
+      let weather = weathers[i % weathers.length]
+      data.push({ weather, banners, news: news[i] })
     }
 
-    await this.commercialRepository.create({
-      news: { create: news },
-      weather: { connect: { id: updatedOrCreatedWeather.id } }
-    })
+    return data
   }
 }
