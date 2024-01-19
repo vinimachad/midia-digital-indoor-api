@@ -1,18 +1,23 @@
 import { News } from 'models/news-model'
-import CreateNewsUseCase, { ICreateNewsUseCase } from './create-news-use-case'
+import NewsRepository, {
+  INewsRepository
+} from '@repositories/commercial/news-repository'
 
 export interface ICreateManyNewsUseCase {
   execute(data: News[])
 }
 
 export default class CreateManyNewsUseCase implements ICreateManyNewsUseCase {
-  constructor(
-    private createNewsUseCase: ICreateNewsUseCase = new CreateNewsUseCase()
-  ) {}
+  constructor(private repository: INewsRepository = new NewsRepository()) {}
 
   async execute(data: News[]) {
-    for (let item of data) {
-      await this.createNewsUseCase.execute(item)
-    }
+    let ids = data.map((item) => item.id)
+    const existingNewsIds = (await this.repository.findManyByIds(ids)).map(
+      (item) => item.id
+    )
+    const uniqueItems = data.filter(
+      (data) => !existingNewsIds.includes(data.id)
+    )
+    await this.repository.createMany(uniqueItems)
   }
 }

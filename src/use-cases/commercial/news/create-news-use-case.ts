@@ -13,7 +13,6 @@ export default class CreateNewsUseCase implements ICreateNewsUseCase {
   async execute(news: Prisma.NewsCreateInput) {
     const alreadyExistNews = await this.newsRepository.findById(news.id)
     if (alreadyExistNews) return
-
-    const { id } = await this.newsRepository.create(news)
+    await this.newsRepository.create(news)
   }
 }

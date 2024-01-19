@@ -12,6 +12,7 @@ datasource db {
 
 model News {
   id        String   @id
+  index     Int      @default(autoincrement())
   type      String
   title     String
   image_url String

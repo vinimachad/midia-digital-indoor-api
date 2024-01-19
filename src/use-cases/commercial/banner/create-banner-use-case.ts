@@ -1,6 +1,6 @@
 import BannerRepository, {
   IBannerRepository
-} from '@repositories/commercial/banner-repository'
+} from '@usecases/commercial/banner/banner-repository'
 
 export interface ICreateBannerUseCase {
   execute(file?: Express.Multer.File)

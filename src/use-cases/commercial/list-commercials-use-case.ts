@@ -6,7 +6,7 @@ import ListWeatherUseCase, {
 } from './weather/list-weather-use-case'
 import BannerRepository, {
   IBannerRepository
-} from '@repositories/commercial/banner-repository'
+} from '@usecases/commercial/banner/banner-repository'
 import CreateCommercialUseCase, {
   ICreateCommercialUseCase
 } from './create-commercial-use-case'

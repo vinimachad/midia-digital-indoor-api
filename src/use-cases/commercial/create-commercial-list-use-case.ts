@@ -32,13 +32,6 @@ export default class CreateCommercialListUseCase
 
     await this.createManyNewsUseCase.execute(jpNews)
     await this.createManyWeathers(weatherData)
-    // let maxLength = Math.max(jpNews.length, weatherData.length)
-
-    // for (let i = 0; i < maxLength; i++) {
-    //   let weather = weatherData[i % weatherData.length]
-    //   let news = jpNews[i % jpNews.length]
-    //   await this.createCommercialUseCase.execute(weather, news)
-    // }
   }
 
   private async createManyWeathers(data: WeatherRequest[]) {

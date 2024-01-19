@@ -9,7 +9,7 @@ export interface IScrapJovemPanLatestNewsUseCase {
 export default class ScrapJovemPanLatestNewsUseCase {
   async execute() {
     try {
-      const url = 'https://jovempan.com.br/noticias/page/1'
+      const url = 'https://jovempan.com.br/noticias'
       const response = await axios.get(url)
       const data: any = response.data
       const $ = cheerio.load(data)
