@@ -42,7 +42,7 @@ export default class NewsRepository implements INewsRepository {
     return await this.client.news.findMany({
       skip,
       take,
-      orderBy: { index: 'asc' }
+      orderBy: { index: 'desc' }
     })
   }
 }

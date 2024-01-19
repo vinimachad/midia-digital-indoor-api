@@ -18,6 +18,6 @@ export default class CreateManyNewsUseCase implements ICreateManyNewsUseCase {
     const uniqueItems = data.filter(
       (data) => !existingNewsIds.includes(data.id)
     )
-    await this.repository.createMany(uniqueItems)
+    await this.repository.createMany(uniqueItems.reverse())
   }
 }
