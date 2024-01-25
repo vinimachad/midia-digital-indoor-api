@@ -6,7 +6,8 @@
   "scripts": {
     "start:dev": "npx nodemon",
     "start:prod": "rimraf ./build && tsc",
-    "build": "node build/index.js",
+    "build": "npm run migrate:dev && node build/index.js",
+    "migrate:dev": "npx prisma migrate dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
