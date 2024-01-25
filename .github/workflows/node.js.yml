@@ -22,7 +22,7 @@ jobs:
       - run: npm run prisma migrate dev
       - run: npm run start
 
-      - name: Run automated tests
+      # - name: Run automated tests
       # run: npm test
       
   deploy:
