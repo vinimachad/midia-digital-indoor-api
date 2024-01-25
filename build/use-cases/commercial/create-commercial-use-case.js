@@ -12,17 +12,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const commercial_repository_1 = __importDefault(require("repositories/commercial/commercial-repository"));
+const banner_repository_1 = __importDefault(require("@usecases/commercial/banner/banner-repository"));
+const list_weather_use_case_1 = __importDefault(require("./weather/list-weather-use-case"));
+const news_repository_1 = __importDefault(require("@repositories/commercial/news-repository"));
 class CreateCommercialUseCase {
-    constructor(commercialRepository = new commercial_repository_1.default()) {
-        this.commercialRepository = commercialRepository;
+    constructor(newsRepository = new news_repository_1.default(), bannerRepository = new banner_repository_1.default(), listWeatherUseCase = new list_weather_use_case_1.default()) {
+        this.newsRepository = newsRepository;
+        this.bannerRepository = bannerRepository;
+        this.listWeatherUseCase = listWeatherUseCase;
     }
-    execute(data) {
+    execute(skip, limit) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (!data) {
-                throw new Error('Precisamos de todos os dados para criar uma propaganda');
+            var data = [];
+            let news = yield this.newsRepository.listWithPagination(skip, limit);
+            let banners = yield this.bannerRepository.list();
+            let weathers = yield this.listWeatherUseCase.execute();
+            for (let i = 0; i < news.length; i++) {
+                let weather = weathers[i % weathers.length];
+                data.push({ weather, banners, news: news[i] });
             }
-            yield this.commercialRepository.create(data);
+            return data;
         });
     }
 }

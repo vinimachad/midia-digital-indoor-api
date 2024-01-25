@@ -38,8 +38,5 @@
     "strict": true,
     "noImplicitAny": false,
     "skipLibCheck": true
-  },
-  "files": [
-    "index.js"
-  ]
+  }
 }
