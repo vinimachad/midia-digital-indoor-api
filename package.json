@@ -2,7 +2,7 @@
   "name": "midia-digital-indoor-api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "build/index.js",
   "scripts": {
     "start:dev": "npx nodemon",
     "start": "npm run build && node build/index.js",
