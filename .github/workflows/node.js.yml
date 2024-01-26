@@ -18,13 +18,13 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: [build]
-    steps:
-      - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.12.12 
-        with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "midia-digital-indoor-staging"
-          heroku_email: "viniciusgm45@gmail.com"
+  # deploy:
+  #   runs-on: ubuntu-latest
+  #   needs: [build]
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: akhileshns/heroku-deploy@v3.12.12 
+  #       with:
+  #         heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+  #         heroku_app_name: "midia-digital-indoor-staging"
+  #         heroku_email: "viniciusgm45@gmail.com"
