@@ -3,11 +3,15 @@ import multerS3 from 'multer-s3'
 import { S3Client } from '@aws-sdk/client-s3'
 import crypto from 'crypto'
 
+const region = process.env.AWS_S3_REGION ?? ''
+const accessKeyId = process.env.AWS_S3_ACCESS_KEY_ID ?? ''
+const secretAccessKey = process.env.AWS_S3_SECRET_ACCESS_KEY ?? ''
+
 const s3 = new S3Client({
-  region: 'sa-east-1',
+  region,
   credentials: {
-    accessKeyId: 'AKIAXGYLGLYS6UYVDVGM',
-    secretAccessKey: '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'
+    accessKeyId,
+    secretAccessKey
   }
 })
 
