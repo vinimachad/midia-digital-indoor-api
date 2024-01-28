@@ -5,19 +5,19 @@ import CreateCommercialListUseCase, {
 import ListCommercialsUseCase, {
   IListCommercialsUseCase
 } from '@usecases/commercial/list-commercials-use-case'
-import CreateBannerUseCase, {
-  ICreateBannerUseCase
+import CreateBannersUseCase, {
+  ICreateBannersUseCase
 } from '@usecases/commercial/banner/create-banner-use-case'
 
 export default class CommercialController {
   constructor(
-    private createBannerUseCase: ICreateBannerUseCase = new CreateBannerUseCase(),
+    private createBannersUseCase: ICreateBannersUseCase = new CreateBannersUseCase(),
     private createCommercialListUseCase: ICreateCommercialListUseCase = new CreateCommercialListUseCase(),
     private listCommercialsUseCase: IListCommercialsUseCase = new ListCommercialsUseCase()
   ) {}
 
   async create(req: Request, res: Response) {
-    await this.createBannerUseCase.execute(req.file)
+    await this.createBannersUseCase.execute(req.files?.files)
     res.json({ message: 'ok' })
   }
 
