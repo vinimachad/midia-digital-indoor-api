@@ -15,5 +15,4 @@ app.use(routes)
 app.listen(process.env.PORT || 8080, async () => {
   console.log('| -------------------------------- |')
   console.log('| server started ✅                |')
-  console.log(`| on: http://localhost:${process.env.PORT}|`)
 })
