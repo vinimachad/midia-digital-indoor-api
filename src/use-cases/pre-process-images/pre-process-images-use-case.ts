@@ -1,15 +1,15 @@
-import { error } from 'console'
+import { UploadedFile } from 'express-fileupload'
 import path from 'path'
 import sharp from 'sharp'
 
 export interface IPreProcessImagesUseCase {
-  execute(file?: Express.Multer.File)
+  execute(file?: UploadedFile)
 }
 
 export default class PreProcessImagesUseCase
   implements IPreProcessImagesUseCase
 {
-  async execute(file?: Express.Multer.File): Promise<void> {
+  async execute(file?: UploadedFile): Promise<void> {
     if (!file) {
       throw new Error('Precisamos de um arquivo')
     }
@@ -20,7 +20,7 @@ export default class PreProcessImagesUseCase
       '..',
       '..',
       '/upload',
-      file?.filename ?? ''
+      file?.name ?? ''
     )
 
     let out_local_file_path = path.join(
@@ -30,7 +30,7 @@ export default class PreProcessImagesUseCase
       '..',
       '/upload',
       '/processed-images',
-      file?.filename ?? ''
+      file?.name ?? ''
     )
 
     try {
