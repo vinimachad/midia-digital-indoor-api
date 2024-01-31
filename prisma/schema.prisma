@@ -51,3 +51,11 @@ model Banner {
   id  String @id @default(uuid())
   url String
 }
+
+model User {
+  id           String @id @default(uuid())
+  full_name    String
+  email        String @unique
+  password     String
+  phone_number String @unique
+}
