@@ -4,6 +4,7 @@ import UserRepository, {
   IUserRepository
 } from '@repositories/user/user-reposiory'
 import AppError from '@middlewares/error/error-model'
+import jwt from 'jsonwebtoken'
 
 export interface ICreateUserUseCase {
   execute(data: Prisma.UserCreateInput)
@@ -19,11 +20,20 @@ export default class CreateUserUseCase implements ICreateUserUseCase {
     this.validateEmailAndPhone(emailExists != null, phoneExists != null)
 
     try {
-      await this.repository.create({
-        ...data,
-        password: await this.encodePassword(data.password),
-        full_name: data.full_name.toLowerCase()
-      })
+      let { id, email, full_name, phone_number } = await this.repository.create(
+        {
+          ...data,
+          password: await this.encodePassword(data.password),
+          full_name: data.full_name.toLowerCase()
+        }
+      )
+
+      return {
+        email,
+        full_name,
+        phone_number,
+        token_jwt: this.signInJwt(id)
+      }
     } catch (error) {
       throw new AppError({
         status_code: 422,
@@ -53,5 +63,9 @@ export default class CreateUserUseCase implements ICreateUserUseCase {
         message: message
       })
     }
+  }
+
+  private signInJwt(id: string): string {
+    return jwt.sign({ id }, process.env.JWT_SECRET_KEY ?? '', { expiresIn: 30 })
   }
 }
