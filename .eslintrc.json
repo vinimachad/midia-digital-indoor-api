@@ -47,6 +47,10 @@
         [
           "@middlewares",
           "./src/middlewares"
+        ],
+        [
+          "@models",
+          "./src/models"
         ]
       ]
     }
