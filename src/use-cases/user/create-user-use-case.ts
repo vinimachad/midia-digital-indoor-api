@@ -4,7 +4,7 @@ import UserRepository, {
   IUserRepository
 } from '@repositories/user/user-reposiory'
 import AppError from '@middlewares/error/error-model'
-import jwt from 'jsonwebtoken'
+import jwt from '@configs/jwt'
 
 export interface ICreateUserUseCase {
   execute(data: Prisma.UserCreateInput)
@@ -29,6 +29,7 @@ export default class CreateUserUseCase implements ICreateUserUseCase {
       )
 
       return {
+        id,
         email,
         full_name,
         phone_number,
@@ -65,7 +66,7 @@ export default class CreateUserUseCase implements ICreateUserUseCase {
     }
   }
 
-  private signInJwt(id: string): string {
-    return jwt.sign({ id }, process.env.JWT_SECRET_KEY ?? '', { expiresIn: 30 })
+  private signInJwt(user_id: string): string {
+    return jwt().jwtToken().sign(user_id)
   }
 }

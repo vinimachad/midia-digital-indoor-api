@@ -18,4 +18,8 @@ export default abstract class BaseRepository<T> {
   async list() {
     return await this.client[this.model].findMany()
   }
+
+  async deleteById(id: string) {
+    await this.client[this.model].delete({ where: { id } })
+  }
 }
