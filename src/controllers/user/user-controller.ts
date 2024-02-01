@@ -1,8 +1,8 @@
+import { userSchema } from '@models/zod/schemas/user'
 import CreateUserUseCase, {
   ICreateUserUseCase
 } from '@usecases/user/create-user-use-case'
 import { Request, Response } from 'express'
-import { userSchema } from '../../models/zod/schemas/user'
 
 export default function UserController(
   createUserUseCase: ICreateUserUseCase = new CreateUserUseCase()

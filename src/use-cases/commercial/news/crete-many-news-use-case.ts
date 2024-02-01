@@ -1,4 +1,4 @@
-import { News } from 'models/news-model'
+import { News } from '@models/news-model'
 import NewsRepository, {
   INewsRepository
 } from '@repositories/commercial/news-repository'

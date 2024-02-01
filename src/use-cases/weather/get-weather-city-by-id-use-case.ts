@@ -1,5 +1,5 @@
+import { Forecast, Weather } from '@models/weather'
 import axios from 'axios'
-import { Forecast, Weather } from 'models/weather'
 
 export interface IGetWeatherCityByIdUseCase {
   execute(city_id: string)
