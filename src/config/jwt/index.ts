@@ -21,7 +21,7 @@ export default function jwt() {
     let secret = process.env.SECRET_ACCESS_TOKEN_KEY ?? ''
     return {
       verify: (token: string) => _verify(token, secret),
-      sign: (user_id: string) => _sign(user_id, secret, 10)
+      sign: (user_id: string) => _sign(user_id, secret, '1h')
     }
   }
 
