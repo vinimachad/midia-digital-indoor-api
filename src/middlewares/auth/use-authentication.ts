@@ -31,12 +31,8 @@ const useAuthentication =
     async function _verifyRefreshToken() {
       try {
         await findByUserIdAndTokenUseCase.execute(token_jwt)
-      } catch {
-        throw new AppError({
-          status_code: 401,
-          title: 'Token inválido',
-          message: 'Token inválido'
-        })
+      } catch (error) {
+        throw error
       }
     }
   }

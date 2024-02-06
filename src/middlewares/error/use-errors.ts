@@ -8,7 +8,9 @@ export default function useErrors(
   next: NextFunction
 ) {
   if (error instanceof AppError) {
-    return res.status(error.configs.status_code).json(error.configs)
+    return res
+      .status(error.configs.status_code)
+      .json({ name: 'APIError', ...error.configs })
   }
 
   return res.status(500).json({
