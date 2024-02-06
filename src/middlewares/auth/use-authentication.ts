@@ -1,3 +1,4 @@
+import jwt from '@configs/jwt'
 import AppError from '@middlewares/error/error-model'
 import FindRefreshTokenByIdUseCase, {
   IFindRefreshTokenByIdUseCase
@@ -19,20 +20,20 @@ const useAuthentication =
           'O campo Authorization no headers é obrigatório pra realizar essa chamada'
       })
 
-    let [_, token_jwt] = authorization.split(' ')
+    let [_, access_token] = authorization.split(' ')
 
     await _decodeJwt()
     next()
 
     async function _decodeJwt() {
-      await _verifyRefreshToken()
+      await _verifyAccessToken()
     }
 
-    async function _verifyRefreshToken() {
+    async function _verifyAccessToken() {
       try {
-        await findByUserIdAndTokenUseCase.execute(token_jwt)
+        jwt().accessToken().verify(access_token)
       } catch (error) {
-        throw error
+        throw new AppError({ status_code: 401, title: 'Token inválido' })
       }
     }
   }

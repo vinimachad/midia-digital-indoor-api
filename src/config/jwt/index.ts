@@ -5,11 +5,7 @@ export default function jwt() {
     return jsonwebtoken.verify(token, secret) as { id: string }
   }
 
-  function _sign(
-    id: string,
-    secret: string,
-    expiresIn: string | number | undefined
-  ) {
+  function _sign(id: string, secret: string, expiresIn: string | number | undefined) {
     return jsonwebtoken.sign({ id }, secret, { expiresIn })
   }
 
@@ -21,16 +17,16 @@ export default function jwt() {
     }
   }
 
-  function jwtToken() {
-    let secret = process.env.JWT_SECRET_KEY ?? ''
+  function accessToken() {
+    let secret = process.env.SECRET_ACCESS_TOKEN_KEY ?? ''
     return {
       verify: (token: string) => _verify(token, secret),
-      sign: (user_id: string) => _sign(user_id, secret, 30)
+      sign: (user_id: string) => _sign(user_id, secret, 10)
     }
   }
 
   return {
     refreshToken,
-    jwtToken
+    accessToken
   }
 }

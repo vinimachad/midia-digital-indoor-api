@@ -1,11 +1,12 @@
 import jwt from '@configs/jwt'
 import AppError from '@middlewares/error/error-model'
+import { RefreshToken } from '@prisma/client'
 import RefreshTokenRepository, {
   IRefreshTokenRepository
 } from '@repositories/user/refresh token/refresh-token-repository'
 
 export interface ICreateRefreshTokenUseCase {
-  execute(user_id: string)
+  execute(user_id: string): Promise<RefreshToken>
 }
 
 export default class CreateRefreshTokenUseCase

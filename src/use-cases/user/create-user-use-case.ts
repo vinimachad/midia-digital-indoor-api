@@ -5,13 +5,19 @@ import UserRepository, {
 } from '@repositories/user/user-reposiory'
 import AppError from '@middlewares/error/error-model'
 import jwt from '@configs/jwt'
+import CreateRefreshTokenUseCase, {
+  ICreateRefreshTokenUseCase
+} from './refresh-token/create-refresh-token-use-case'
 
 export interface ICreateUserUseCase {
   execute(data: Prisma.UserCreateInput)
 }
 
 export default class CreateUserUseCase implements ICreateUserUseCase {
-  constructor(private repository: IUserRepository = new UserRepository()) {}
+  constructor(
+    private repository: IUserRepository = new UserRepository(),
+    private createRefreshTokenUseCase: ICreateRefreshTokenUseCase = new CreateRefreshTokenUseCase()
+  ) {}
 
   async execute(data: Prisma.UserCreateInput) {
     let emailExists = await this.repository.findByEmail(data.email)
@@ -27,13 +33,15 @@ export default class CreateUserUseCase implements ICreateUserUseCase {
           full_name: data.full_name.toLowerCase()
         }
       )
+      let { refresh_token } = await this.createRefreshTokenUseCase.execute(id)
 
       return {
         id,
         email,
         full_name,
         phone_number,
-        token_jwt: this.signInJwt(id)
+        access_token: this.signInJwt(id),
+        refresh_token
       }
     } catch (error) {
       throw new AppError({
@@ -67,6 +75,6 @@ export default class CreateUserUseCase implements ICreateUserUseCase {
   }
 
   private signInJwt(user_id: string): string {
-    return jwt().jwtToken().sign(user_id)
+    return jwt().accessToken().sign(user_id)
   }
 }

@@ -5,17 +5,11 @@ import RefreshTokenRepository, {
 } from '@repositories/user/refresh token/refresh-token-repository'
 
 export interface IFindRefreshTokenByIdUseCase {
-  execute(
-    token: string
-  ): Promise<{ id: string; refresh_token: string; user_id: string }>
+  execute(token: string): Promise<{ id: string; refresh_token: string; user_id: string }>
 }
 
-export default class FindRefreshTokenByIdUseCase
-  implements IFindRefreshTokenByIdUseCase
-{
-  constructor(
-    private repository: IRefreshTokenRepository = new RefreshTokenRepository()
-  ) {}
+export default class FindRefreshTokenByIdUseCase implements IFindRefreshTokenByIdUseCase {
+  constructor(private repository: IRefreshTokenRepository = new RefreshTokenRepository()) {}
 
   async execute(token: string) {
     try {

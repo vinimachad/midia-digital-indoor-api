@@ -1,10 +1,14 @@
 import crypt from 'bcrypt'
 import AppError from '@middlewares/error/error-model'
 import { User } from '@prisma/client'
-import UserRepository, {
-  IUserRepository
-} from '@repositories/user/user-reposiory'
+import UserRepository, { IUserRepository } from '@repositories/user/user-reposiory'
 import jwt from '@configs/jwt'
+import CanRefreshTokenUseCaseUseCase, {
+  ICanRefreshTokenUseCaseUseCase
+} from './refresh-token/can-refresh-token-use-case-use-case'
+import CreateRefreshTokenAndDeleteOthersUseCase, {
+  ICreateRefreshTokenAndDeleteOthersUseCase
+} from './refresh-token/create-refresh-token-and-delete-others-use-case'
 
 type Request = { password: string; email?: string; phone_number?: string }
 
@@ -12,10 +16,11 @@ export interface ILoginUserUseCaseTsUseCase {
   execute(data: Request)
 }
 
-export default class LoginUserUseCaseTsUseCase
-  implements ILoginUserUseCaseTsUseCase
-{
-  constructor(private repository: IUserRepository = new UserRepository()) {}
+export default class LoginUserUseCaseTsUseCase implements ILoginUserUseCaseTsUseCase {
+  constructor(
+    private repository: IUserRepository = new UserRepository(),
+    private createRefreshTokenAndDeleteOthersUseCase: ICreateRefreshTokenAndDeleteOthersUseCase = new CreateRefreshTokenAndDeleteOthersUseCase()
+  ) {}
 
   async execute(data: Request) {
     if (!data.email && !data.phone_number) {
@@ -27,24 +32,24 @@ export default class LoginUserUseCaseTsUseCase
 
     var user: User | null = null
     if (data.email) user = await this.repository.findByEmail(data.email)
-    if (data.phone_number)
-      user = await this.repository.findByPhone(data.phone_number)
+    if (data.phone_number) user = await this.repository.findByPhone(data.phone_number)
 
     if (!user)
       throw new AppError({
         status_code: 404,
         title: 'Usuário não encontrado',
-        message:
-          'Não foi possível encontrar nenhum usuário com esse email ou telefone.'
+        message: 'Não foi possível encontrar nenhum usuário com esse email ou telefone.'
       })
 
     await this.tryComparePassword(data.password, user.password)
-    let token_jwt = jwt().jwtToken().sign(user.id)
+    let refresh_token = await this.createRefreshTokenAndDeleteOthersUseCase.execute(user.id)
+
     return {
       id: user.id,
       email: user.email,
       full_name: user.full_name,
-      token_jwt
+      access_token: jwt().accessToken().sign(user.id),
+      refresh_token
     }
   }
 
