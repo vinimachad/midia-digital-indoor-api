@@ -3,7 +3,7 @@ import useAuthentication from '@middlewares/auth/use-authentication'
 import useValidate from '@middlewares/zod/use-validate'
 import { userSchema } from '@models/zod/schemas/user'
 import { userLoginSchema } from '@models/zod/schemas/user-login'
-import { Router } from 'express'
+import express, { Router } from 'express'
 
 const userRoutes = Router()
 const userController = UserController()
@@ -11,8 +11,6 @@ const userController = UserController()
 userRoutes.get('/refresh-token', userController.refreshToken)
 userRoutes.post('/register', useValidate(userSchema), userController.create)
 userRoutes.post('/login', useValidate(userLoginSchema), userController.login)
-userRoutes.get('/test', useAuthentication(), (req, res) => {
-  res.status(200).json({ results: { message: 'authenticated' } })
-})
+userRoutes.get('/infos', useAuthentication(), userController.infos)
 
 export default userRoutes
