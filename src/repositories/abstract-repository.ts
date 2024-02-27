@@ -8,7 +8,7 @@ export default abstract class BaseRepository<T> {
   ) {}
 
   async findById(id: string) {
-    return await this.client.user.findUnique({ where: { id } })
+    return await this.client[this.model].findUnique({ where: { id } })
   }
 
   async create(data: T) {

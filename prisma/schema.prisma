@@ -53,12 +53,14 @@ model Banner {
 }
 
 model User {
-  id             String         @id @default(uuid())
-  full_name      String
-  email          String         @unique
-  password       String
-  phone_number   String         @unique
-  refresh_tokens RefreshToken[]
+  id              String         @id @default(uuid())
+  full_name       String
+  email           String         @unique
+  password        String
+  phone_number    String         @unique
+  refresh_tokens  RefreshToken[]
+  subscription    Subscription?  @relation(fields: subscription_id, references: id)
+  subscription_id String?        @unique
 }
 
 model RefreshToken {
@@ -68,4 +70,24 @@ model RefreshToken {
   created_at    DateTime @default(now())
   User          User?    @relation(fields: [userId], references: [id])
   userId        String?
+}
+
+model Subscription {
+  id                   String             @id
+  plan_id              String             @unique
+  customer_id          String             @unique
+  value                Decimal
+  status               SubscriptionStatus
+  user                 User?
+  created_at           DateTime           @default(now())
+  updated_at           DateTime           @default(now())
+  cancel_at            BigInt?
+  canceled_at          BigInt?
+  current_period_end   BigInt
+  current_period_start BigInt
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELED
 }

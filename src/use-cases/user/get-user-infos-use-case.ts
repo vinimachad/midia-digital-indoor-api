@@ -3,7 +3,7 @@ import AppError from '@middlewares/error/error-model'
 import { User } from '@prisma/client'
 import UserRepository, { IUserRepository } from '@repositories/user/user-reposiory'
 
-type UserInfo = Omit<User, 'password'>
+type UserInfo = Omit<User, 'password' | 'subscription_id'>
 
 export interface IGetUserInfosUseCase {
   execute(access_token: string): Promise<UserInfo>
