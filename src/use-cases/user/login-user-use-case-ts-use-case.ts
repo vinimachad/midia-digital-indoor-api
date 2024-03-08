@@ -3,17 +3,21 @@ import AppError from '@middlewares/error/error-model'
 import { User } from '@prisma/client'
 import UserRepository, { IUserRepository } from '@repositories/user/user-reposiory'
 import jwt from '@configs/jwt'
-import CanRefreshTokenUseCaseUseCase, {
-  ICanRefreshTokenUseCaseUseCase
-} from './refresh-token/can-refresh-token-use-case-use-case'
 import CreateRefreshTokenAndDeleteOthersUseCase, {
   ICreateRefreshTokenAndDeleteOthersUseCase
 } from './refresh-token/create-refresh-token-and-delete-others-use-case'
 
 type Request = { password: string; email?: string; phone_number?: string }
+type Response = {
+  id: string
+  email: string
+  full_name: string
+  access_token: string
+  refresh_token: string
+}
 
 export interface ILoginUserUseCaseTsUseCase {
-  execute(data: Request)
+  execute(data: Request): Promise<Response>
 }
 
 export default class LoginUserUseCaseTsUseCase implements ILoginUserUseCaseTsUseCase {

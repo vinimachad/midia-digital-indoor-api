@@ -1,3 +1,4 @@
+import cookies from '@configs/cookies'
 import { userSchema } from '@models/zod/schemas/user'
 import { userLoginSchema } from '@models/zod/schemas/user-login'
 import CreateUserUseCase, { ICreateUserUseCase } from '@usecases/user/create-user-use-case'
@@ -17,6 +18,7 @@ export default function UserController(
   async function create(req: Request, res: Response) {
     let user = userSchema.parse(req).body
     let results = await createUserUseCase.execute(user)
+
     res.status(200).json({ results })
   }
 
@@ -30,6 +32,7 @@ export default function UserController(
 
   async function login(req: Request, res: Response) {
     let results = await loginUserUseCaseTsUseCase.execute(userLoginSchema.parse(req).body)
+
     res.status(200).json({ results })
   }
 

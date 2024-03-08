@@ -9,7 +9,8 @@
     "start": "node build/index.js",
     "migrate:dev": "npx prisma db push",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:gen-js-files": "rimraf ./build && tsc"
+    "build:gen-js-files": "rimraf ./build && tsc",
+    "stripe:listen": "stripe listen --forward-to localhost:8080/payment-webhook"
   },
   "keywords": [],
   "author": "",
