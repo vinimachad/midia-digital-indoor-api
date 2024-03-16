@@ -8,8 +8,11 @@ export interface IRefreshTokenRepository extends BaseRepository<Prisma.RefreshTo
 }
 
 export default class RefreshTokenRepository extends BaseRepository<RefreshToken> implements IRefreshTokenRepository {
+  model: any
+
   constructor() {
-    super('RefreshToken')
+    super()
+    this.model = this.client.refreshToken
   }
 
   async findByUserIdAndToken(data: { user_id: string; refresh_token: string }) {

@@ -2,7 +2,6 @@ export default {
   access_token: {
     name: 'access_token',
     config: {
-      httpOnly: true,
       expires: (() => {
         let expireDate = new Date()
         expireDate.setHours(expireDate.getHours() + 1)

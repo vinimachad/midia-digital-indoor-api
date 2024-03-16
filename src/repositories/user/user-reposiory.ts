@@ -1,19 +1,18 @@
 import { Prisma, User } from '@prisma/client'
 import BaseRepository from '@repositories/abstract-repository'
 
-export interface IUserRepository
-  extends BaseRepository<Prisma.UserCreateInput> {
+export interface IUserRepository extends BaseRepository<Prisma.UserCreateInput> {
   create(data: Prisma.UserCreateInput): Promise<User>
   findByEmail(email: string): Promise<User | null>
   findByPhone(phone: string): Promise<User | null>
 }
 
-export default class UserRepository
-  extends BaseRepository<User>
-  implements IUserRepository
-{
+export default class UserRepository extends BaseRepository<User> implements IUserRepository {
+  model: any
+
   constructor() {
-    super('User')
+    super()
+    this.model = this.client.user
   }
 
   async findByEmail(email: string) {

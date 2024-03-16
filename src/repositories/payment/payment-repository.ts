@@ -15,8 +15,11 @@ export default class PaymentRepository
   extends BaseRepository<Prisma.SubscriptionCreateInput>
   implements IPaymentRepository
 {
+  model: any
+
   constructor() {
-    super('Subscription')
+    super()
+    this.model = this.client.subscription
   }
 
   async update(id: string, data: Prisma.SubscriptionUpdateInput) {
