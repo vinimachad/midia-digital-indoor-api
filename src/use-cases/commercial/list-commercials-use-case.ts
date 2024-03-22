@@ -1,16 +1,9 @@
 import NewsRepository, {
   INewsRepository
 } from '@repositories/commercial/news-repository'
-import ListWeatherUseCase, {
-  IListWeatherUseCase
-} from './weather/list-weather-use-case'
-import BannerRepository, {
-  IBannerRepository
-} from '@usecases/commercial/banner/banner-repository'
 import CreateCommercialUseCase, {
   ICreateCommercialUseCase
 } from './create-commercial-use-case'
-import { skip } from 'node:test'
 
 export type CommercialsPaginated = {
   totalPages: number

@@ -7,7 +7,7 @@ import ListWeatherUseCase, {
 import NewsRepository, {
   INewsRepository
 } from '@repositories/commercial/news-repository'
-import { Commercial } from 'models/commercial'
+import { Commercial } from '@models/commercial'
 
 export interface ICreateCommercialUseCase {
   execute(skip: number, limit: number): Promise<Commercial[]>

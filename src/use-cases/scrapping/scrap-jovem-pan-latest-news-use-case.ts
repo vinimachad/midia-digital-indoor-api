@@ -1,6 +1,6 @@
+import { News } from '@models/news-model'
 import axios from 'axios'
 import * as cheerio from 'cheerio'
-import { News } from 'models/news-model'
 
 export interface IScrapJovemPanLatestNewsUseCase {
   execute(): Promise<News[]>
