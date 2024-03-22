@@ -34,13 +34,10 @@ export default class LoginUserUseCaseTsUseCase implements ILoginUserUseCaseTsUse
       })
     }
 
-    console.log('-> 1', data)
-
     var user: User | null = null
     if (data.email) user = await this.repository.findByEmail(data.email)
     if (data.phone_number) user = await this.repository.findByPhone(data.phone_number)
 
-    console.log('-> 2', user)
     if (!user)
       throw new AppError({
         status_code: 404,
@@ -48,12 +45,8 @@ export default class LoginUserUseCaseTsUseCase implements ILoginUserUseCaseTsUse
         message: 'Não foi possível encontrar nenhum usuário com esse email ou telefone.'
       })
 
-    console.log('-> 3', user)
-
     await this.tryComparePassword(data.password, user.password)
-    console.log('-> 4', user)
     let refresh_token = await this.createRefreshTokenAndDeleteOthersUseCase.execute(user.id)
-    console.log('-> 5', user)
     return {
       id: user.id,
       email: user.email,
