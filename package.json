@@ -5,9 +5,9 @@
   "main": "build/index.js",
   "scripts": {
     "start:dev": "npx nodemon",
-    "build": "npm run migrate:deploy && npm run build:gen-js-files",
+    "build": "npm run migrate:push && npm run build:gen-js-files",
     "start": "node build/index.js",
-    "migrate:deploy": "npx prisma migrate deploy",
+    "migrate:push": "npx prisma db push",
     "migrate:dev": "npx prisma migrate dev",
     "test": "",
     "build:gen-js-files": "rimraf ./build && tsc",
