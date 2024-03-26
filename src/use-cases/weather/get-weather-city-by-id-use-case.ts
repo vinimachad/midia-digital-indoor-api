@@ -1,4 +1,4 @@
-import { Forecast, Weather } from '@models/weather'
+import { Forecast, Weather } from '@type/weather'
 import axios from 'axios'
 
 export interface IGetWeatherCityByIdUseCase {
@@ -26,23 +26,13 @@ export type ForecastRequest = {
   weekday: string
 }
 
-export default class GetWeatherCityByIdUseCase
-  implements IGetWeatherCityByIdUseCase
-{
+export default class GetWeatherCityByIdUseCase implements IGetWeatherCityByIdUseCase {
   async execute(city_id: string): Promise<WeatherRequest> {
     try {
       const response = await axios.get<{ results: Weather }>(
         `https://api.hgbrasil.com/weather?woeid=${city_id}&key=c17e55b4`
       )
-      const {
-        city_name,
-        sunrise,
-        sunset,
-        temp,
-        description,
-        condition_slug,
-        forecast
-      } = response.data.results
+      const { city_name, sunrise, sunset, temp, description, condition_slug, forecast } = response.data.results
 
       return {
         id: city_id,

@@ -1,4 +1,4 @@
-import { News } from '@models/news-model'
+import { News } from '@type/news-model'
 import axios from 'axios'
 import * as cheerio from 'cheerio'
 
@@ -39,10 +39,7 @@ export default class ScrapJovemPanLatestNewsUseCase {
     return newsList
   }
 
-  private findNewsPostDetails(
-    $: cheerio.CheerioAPI,
-    element: cheerio.AnyNode
-  ): News | undefined {
+  private findNewsPostDetails($: cheerio.CheerioAPI, element: cheerio.AnyNode): News | undefined {
     const title = $(element).find('.post-title').text()
     const link = $(element).find('a').attr('href')
     const image_url = $(element).find('.wp-post-image').attr('src')
