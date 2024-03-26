@@ -1,7 +1,5 @@
-import { News } from '@models/news-model'
-import NewsRepository, {
-  INewsRepository
-} from '@repositories/commercial/news-repository'
+import { News } from '@type/news-model'
+import NewsRepository, { INewsRepository } from '@repositories/commercial/news-repository'
 
 export interface ICreateManyNewsUseCase {
   execute(data: News[])
@@ -12,12 +10,8 @@ export default class CreateManyNewsUseCase implements ICreateManyNewsUseCase {
 
   async execute(data: News[]) {
     let ids = data.map((item) => item.id)
-    const existingNewsIds = (await this.repository.findManyByIds(ids)).map(
-      (item) => item.id
-    )
-    const uniqueItems = data.filter(
-      (data) => !existingNewsIds.includes(data.id)
-    )
+    const existingNewsIds = (await this.repository.findManyByIds(ids)).map((item) => item.id)
+    const uniqueItems = data.filter((data) => !existingNewsIds.includes(data.id))
     await this.repository.createMany(uniqueItems.reverse())
   }
 }
