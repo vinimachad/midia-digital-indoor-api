@@ -5,4 +5,5 @@ export type News = {
   image_url: string
   delay: number
   qrcode: string
+  url: string
 }
