@@ -2,12 +2,8 @@ import { Request, Response } from 'express'
 import CreateCommercialListUseCase, {
   ICreateCommercialListUseCase
 } from '@usecases/commercial/create-commercial-list-use-case'
-import ListCommercialsUseCase, {
-  IListCommercialsUseCase
-} from '@usecases/commercial/list-commercials-use-case'
-import CreateBannersUseCase, {
-  ICreateBannersUseCase
-} from '@usecases/commercial/banner/create-banner-use-case'
+import ListCommercialsUseCase, { IListCommercialsUseCase } from '@usecases/commercial/list-commercials-use-case'
+import CreateBannersUseCase, { ICreateBannersUseCase } from '@usecases/commercial/banner/create-banner-use-case'
 
 export default class CommercialController {
   constructor(

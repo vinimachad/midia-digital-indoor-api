@@ -41,20 +41,20 @@ export default class ScrapJovemPanLatestNewsUseCase {
 
   private findNewsPostDetails($: cheerio.CheerioAPI, element: cheerio.AnyNode): News | undefined {
     const title = $(element).find('.post-title').text()
-    const link = $(element).find('a').attr('href')
+    const url = $(element).find('a').attr('href')
     const image_url = $(element).find('.wp-post-image').attr('src')
-    let qrcode = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${link}`
+    let qrcode = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${url}`
 
-    if (!link || !image_url) return
+    if (!url || !image_url) return
 
     const pattern = /https:\/\/[^\/]+\/([^\.]+)\.html/
-    const result = link.match(pattern)
-    let id = link
+    const result = url.match(pattern)
+    let id = url
 
     if (result) {
       id = result[1].replaceAll('/', '-')
     }
 
-    return { id, type: 'JPan', title, image_url, delay: 20, qrcode }
+    return { id, type: 'JPan', title, image_url, delay: 20, qrcode, url }
   }
 }
