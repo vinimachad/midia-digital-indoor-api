@@ -20,3 +20,13 @@ export namespace CommercialSection {
 }
 
 export type Commercial = CommercialSection.SectionItem[]
+
+export namespace CommercialAnalysis {
+  export type Request = {
+    userId: string
+    index: number
+    title: string
+    description: string
+    file: File
+  }
+}

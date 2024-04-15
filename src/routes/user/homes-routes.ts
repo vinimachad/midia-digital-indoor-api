@@ -1,4 +1,4 @@
-import HomesFactory from '@factories/homes/homes-factory'
+import HomesFactory from '@factories/homes-factory'
 import useAuthentication from '@middlewares/auth/use-authentication'
 import { Router } from 'express'
 
