@@ -1,6 +1,16 @@
 import jsonwebtoken from 'jsonwebtoken'
 
-export default function jwt() {
+type TokenConfig = {
+  verify: (token: string) => { id: string }
+  sign: (userId: string) => string
+}
+
+export interface IConfigJwt {
+  accessToken: () => TokenConfig
+  refreshToken: () => TokenConfig
+}
+
+export default function jwt(): IConfigJwt {
   function _verify(token: string, secret: string) {
     return jsonwebtoken.verify(token, secret) as { id: string }
   }

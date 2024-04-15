@@ -51,6 +51,14 @@
         [
           "@models",
           "./src/models"
+        ],
+        [
+          "@type",
+          "./src/types"
+        ],
+        [
+          "@factories",
+          "./src/factories"
         ]
       ]
     }

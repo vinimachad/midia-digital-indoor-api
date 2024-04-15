@@ -26,6 +26,10 @@ export default class StripeService implements Payment.IPaymentService {
     }
   }
 
+  async getProductById(id: string) {
+    return await this.stripe.products.retrieve(id)
+  }
+
   private constructEvent(config: Payment.StripeEventConfig) {
     try {
       return this.stripe.webhooks.constructEvent(config.body, config.sig, stripeKeys.secretEndpoint)

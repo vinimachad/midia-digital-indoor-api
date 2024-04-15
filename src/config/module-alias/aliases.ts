@@ -7,5 +7,7 @@ export default {
   '@configs': path.join(__dirname, '..', '..', 'config'),
   '@repositories': path.join(__dirname, '..', '..', 'repositories'),
   '@middlewares': path.join(__dirname, '..', '..', 'middlewares'),
-  '@models': path.join(__dirname, '..', '..', 'models')
+  '@models': path.join(__dirname, '..', '..', 'models'),
+  '@type': path.join(__dirname, '..', '..', 'types'),
+  '@factories': path.join(__dirname, '..', '..', 'factories')
 }

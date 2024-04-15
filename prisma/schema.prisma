@@ -60,6 +60,7 @@ model User {
   password        String
   phone_number    String         @unique
   refresh_tokens  RefreshToken[]
+  commercial      Commercial[]
   subscription    Subscription?  @relation(fields: subscription_id, references: id)
   subscription_id String?        @unique
 }
@@ -77,6 +78,7 @@ model Subscription {
   id                   String             @id
   plan_id              String             @unique
   customer_id          String             @unique
+  product_id           String?            @unique
   value                Decimal
   status               SubscriptionStatus
   user                 User?
@@ -88,7 +90,25 @@ model Subscription {
   current_period_start BigInt
 }
 
+model Commercial {
+  id          String           @id
+  index       Int
+  title       String
+  status      CommercialStatus @default(PENDING_ANALYSIS)
+  description String
+  url         String?
+  user        User             @relation(fields: [user_id], references: [id])
+  user_id     String
+  created_at  DateTime         @default(now())
+  updated_at  DateTime         @default(now())
+}
+
 enum SubscriptionStatus {
   ACTIVE
   CANCELED
+}
+
+enum CommercialStatus {
+  PENDING_ANALYSIS
+  ACTIVE
 }

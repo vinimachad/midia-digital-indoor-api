@@ -4,6 +4,7 @@ export namespace Payment {
   export interface IPaymentService {
     notifyWithWebhook(config: StripeEventConfig): Stripe.Event
     getCustomerById(id: string): Promise<StripeCustomer | undefined>
+    getProductById(id: string): Promise<Stripe.Response<Stripe.Product>>
   }
 
   export type StripeEventConfig = { body: any; sig: string }

@@ -5,6 +5,7 @@ export interface IUserRepository extends BaseRepository<Prisma.UserCreateInput> 
   create(data: Prisma.UserCreateInput): Promise<User>
   findByEmail(email: string): Promise<User | null>
   findByPhone(phone: string): Promise<User | null>
+  findById(userId: string): Promise<User | null>
 }
 
 export default class UserRepository extends BaseRepository<User> implements IUserRepository {

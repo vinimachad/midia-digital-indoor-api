@@ -14,6 +14,7 @@ export type UpdateSubscriptionDTO = {
   canceled_at?: number
   current_period_end: number
   current_period_start: number
+  product_id: string
 }
 
 export default function UpdateSubscriptionUseCase(
@@ -42,6 +43,7 @@ export default function UpdateSubscriptionUseCase(
         status: data.status,
         plan_id: data.plan_id,
         cancel_at: data.cancel_at,
+        product_id: data.product_id,
         canceled_at: data.canceled_at,
         customer_id: data.customer_id,
         current_period_end: data.current_period_end,
