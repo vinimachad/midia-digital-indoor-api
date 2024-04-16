@@ -97,6 +97,8 @@ model Commercial {
   status      CommercialStatus @default(PENDING_ANALYSIS)
   description String
   url         String?
+  file_name   String?
+  file_path   String?
   user        User             @relation(fields: [user_id], references: [id])
   user_id     String
   created_at  DateTime         @default(now())

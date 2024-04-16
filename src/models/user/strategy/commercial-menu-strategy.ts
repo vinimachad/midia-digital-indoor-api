@@ -1,5 +1,6 @@
-import { CommercialStatus, Prisma, Commercial as PrismaCommercial } from '@prisma/client'
+import { CommercialStatus, Commercial as PrismaCommercial } from '@prisma/client'
 import { CommercialUpload } from '../homes-model'
+import { differenceDatesInDays } from '@utils/date'
 
 type UploadedCommercial = PrismaCommercial
 
@@ -44,15 +45,14 @@ export class BasicSubscriptionMenuStrategy implements ICommercialMenuStrategy {
   createMenu(uploadedCommercials: UploadedCommercial[]): CommercialUpload[] {
     let commercial: Commercial = {
       status: CommercialUploadStatus.TO_UPLOAD,
-      newUploadAvailable: false,
+      newUploadAvailable: true,
       url: null
     }
 
     if (uploadedCommercials.length > 0) {
       const { status, url, created_at } = uploadedCommercials[0]
       if (status in commercialStatusMapping) {
-        const differenceInMilliseconds = new Date().getTime() - created_at.getTime()
-        const differenceInDays = differenceInMilliseconds / (1000 * 60 * 60 * 24)
+        const differenceInDays = differenceDatesInDays(new Date(), created_at)
         commercial.status = commercialStatusMapping[status]
         commercial.url = url
         commercial.newUploadAvailable = differenceInDays >= minDifferenceDaysToNewUpload
@@ -91,11 +91,10 @@ export class MediumOrProSubscriptionMenuStrategy implements ICommercialMenuStrat
 
     if (uploadedCommercials.length > 0) {
       for (let { status, url, created_at } of uploadedCommercials) {
-        let commercial: Commercial = { status: CommercialUploadStatus.TO_UPLOAD, url: null, newUploadAvailable: false }
+        let commercial: Commercial = { status: CommercialUploadStatus.TO_UPLOAD, url: null, newUploadAvailable: true }
 
         if (status in commercialStatusMapping) {
-          const differenceInMilliseconds = created_at.getTime() - new Date().getTime()
-          const differenceInDays = differenceInMilliseconds / (1000 * 60 * 60 * 24)
+          const differenceInDays = differenceDatesInDays(new Date(), created_at)
           commercial.status = commercialStatusMapping[status]
           commercial.url = url
           commercial.newUploadAvailable = differenceInDays >= minDifferenceDaysToNewUpload

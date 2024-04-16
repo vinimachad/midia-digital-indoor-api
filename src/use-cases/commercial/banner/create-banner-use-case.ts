@@ -1,9 +1,8 @@
 import { UploadedFile } from 'express-fileupload'
-import BannerRepository, {
-  IBannerRepository
-} from '@usecases/commercial/banner/banner-repository'
+import BannerRepository, { IBannerRepository } from '@usecases/commercial/banner/banner-repository'
 import UploadBannersUseCase from '@usecases/upload-image-storage/upload-banners-use-case'
 import { Banner, Prisma } from '.prisma/client'
+import { UploadReturn } from '@configs/aws'
 
 export interface ICreateBannersUseCase {
   execute(file?: UploadedFile | UploadedFile[])
@@ -17,32 +16,32 @@ export default class CreateBannersUseCase implements ICreateBannersUseCase {
 
   async execute(files?: UploadedFile | UploadedFile[]) {
     if (!files) throw new Error('É necessario uma imagem para fazer o upload')
-    let urls = await this.uploadBannersUseCase.execute(files)
+    let uploads = await this.uploadBannersUseCase.execute(files)
 
-    if (Array.isArray(urls)) {
-      await this.handleManyBanners(urls)
+    if (Array.isArray(uploads)) {
+      await this.handleManyBanners(uploads)
     } else {
-      await this.handleSingleBanner(urls)
+      await this.handleSingleBanner(uploads)
     }
   }
 
-  private async handleSingleBanner(url: string) {
-    let { newUrls, existingBanners } = await this.alreadyExistsUrls([url])
+  private async handleSingleBanner(upload: UploadReturn) {
+    let { newUrls, existingBanners } = await this.alreadyExistsUrls([upload])
     await this.updateUrlOfExistingBanners(existingBanners)
     await this.createManyBanners(newUrls)
   }
 
-  private async handleManyBanners(urls: string[]) {
-    let { newUrls, existingBanners } = await this.alreadyExistsUrls(urls)
+  private async handleManyBanners(uploads: UploadReturn[]) {
+    let { newUrls, existingBanners } = await this.alreadyExistsUrls(uploads)
     await this.updateUrlOfExistingBanners(existingBanners)
     await this.createManyBanners(newUrls)
   }
 
-  private async alreadyExistsUrls(urls: string[]) {
-    let existingBanners = await this.repository.findManyByUrl(urls)
+  private async alreadyExistsUrls(uploads: UploadReturn[]) {
+    let existingBanners = await this.repository.findManyByUrl(uploads)
     let existingBannersUrls = existingBanners.map((item) => item.url)
 
-    let newUrls = urls.filter((url) => !existingBannersUrls.includes(url))
+    let newUrls = uploads.filter((upload) => !existingBannersUrls.includes(upload.url))
     return {
       existingBanners,
       newUrls
@@ -55,9 +54,9 @@ export default class CreateBannersUseCase implements ICreateBannersUseCase {
     }
   }
 
-  private async createManyBanners(urls: string[]) {
-    let banner = urls.map((url) => {
-      return { url }
+  private async createManyBanners(uploads: UploadReturn[]) {
+    let banner = uploads.map((upload) => {
+      return { url: upload.url }
     })
     await this.repository.createMany(banner)
   }

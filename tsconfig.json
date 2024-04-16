@@ -37,6 +37,9 @@
       ],
       "@factories/*": [
         "./factories/*"
+      ],
+      "@utils/*": [
+        "./utils/*"
       ]
     },
     "resolveJsonModule": true,

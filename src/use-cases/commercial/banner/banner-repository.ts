@@ -1,3 +1,4 @@
+import { UploadReturn } from '@configs/aws'
 import { prismaClient } from '@configs/prisma'
 import { Banner, Prisma, PrismaClient } from '@prisma/client'
 
@@ -7,7 +8,7 @@ export interface IBannerRepository {
   create(data: Prisma.BannerCreateInput)
   createMany(data: Prisma.BannerCreateInput[])
   findByUrl(url: string): Promise<Banner | null>
-  findManyByUrl(data: string[]): Promise<Banner[]>
+  findManyByUrl(data: UploadReturn[]): Promise<Banner[]>
 }
 
 export default class BannerRepository implements IBannerRepository {
@@ -17,8 +18,8 @@ export default class BannerRepository implements IBannerRepository {
     return await this.client.banner.findFirst({ where: { url } })
   }
 
-  async findManyByUrl(data: string[]) {
-    return await this.client.banner.findMany({ where: { url: { in: data } } })
+  async findManyByUrl(data: UploadReturn[]) {
+    return await this.client.banner.findMany({ where: { url: { in: data.map((item) => item.url) } } })
   }
 
   async list() {

@@ -9,5 +9,6 @@ export default {
   '@middlewares': path.join(__dirname, '..', '..', 'middlewares'),
   '@models': path.join(__dirname, '..', '..', 'models'),
   '@type': path.join(__dirname, '..', '..', 'types'),
-  '@factories': path.join(__dirname, '..', '..', 'factories')
+  '@factories': path.join(__dirname, '..', '..', 'factories'),
+  '@utils': path.join(__dirname, '..', '..', 'utils')
 }
