@@ -1,4 +1,5 @@
 import { Banner, News, Weather } from '@prisma/client'
+import { UploadedFile } from 'express-fileupload'
 
 export namespace CommercialSection {
   interface NewsSectionItem {
@@ -27,6 +28,6 @@ export namespace CommercialAnalysis {
     index: number
     title: string
     description: string
-    file: File
+    file: UploadedFile
   }
 }

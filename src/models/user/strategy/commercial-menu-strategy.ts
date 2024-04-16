@@ -1,6 +1,7 @@
+import { Commercial as PrismaCommercial } from '@prisma/client'
 import { CommercialUpload, CommercialUploadStatus } from '../homes-model'
 
-type UploadedCommercial = { index: 0; status: 'ACTIVE' | 'PENDING_ANALYSIS'; url?: string }
+type UploadedCommercial = PrismaCommercial
 
 export interface ICommercialMenuStrategy {
   createMenu(uploadedCommercials: UploadedCommercial[]): CommercialUpload[]
@@ -24,12 +25,13 @@ export class CommercialMenuContext {
 
 const dropOrClick = 'Arraste e solte ou clique para adicionar uma propaganda'
 const updatePlan = 'Para adicionar uma nova propaganda  é preciso atualizar o seu plano'
-type Commercial = { status: CommercialUploadStatus; url: string | undefined }
+type Commercial = { status: CommercialUploadStatus; url: string | null }
+
 export class BasicSubscriptionMenuStrategy implements ICommercialMenuStrategy {
   createMenu(uploadedCommercials: UploadedCommercial[]): CommercialUpload[] {
-    let commercial: { status: CommercialUploadStatus; url: string | undefined } = {
+    let commercial: Commercial = {
       status: CommercialUploadStatus.TO_UPLOAD,
-      url: undefined
+      url: null
     }
 
     if (uploadedCommercials.length > 0) {
@@ -41,6 +43,7 @@ export class BasicSubscriptionMenuStrategy implements ICommercialMenuStrategy {
           break
         case 'PENDING_ANALYSIS':
           commercial.status = CommercialUploadStatus.PENDING_ANALYSIS
+          commercial.url = firstCommercial.url
           break
       }
     }
@@ -53,11 +56,13 @@ export class BasicSubscriptionMenuStrategy implements ICommercialMenuStrategy {
       },
       {
         index: 1,
+        url: null,
         title: updatePlan,
         status: CommercialUploadStatus.BLOCKED
       },
       {
         index: 2,
+        url: null,
         title: updatePlan,
         status: CommercialUploadStatus.BLOCKED
       }
@@ -70,7 +75,7 @@ export class MediumSubscriptionMenuStrategy implements ICommercialMenuStrategy {
     let commercials: Commercial[] = []
     if (uploadedCommercials.length > 0) {
       for (let uploadedCommercial of uploadedCommercials) {
-        let commercial: Commercial = { status: CommercialUploadStatus.TO_UPLOAD, url: undefined }
+        let commercial: Commercial = { status: CommercialUploadStatus.TO_UPLOAD, url: null }
         switch (uploadedCommercial.status) {
           case 'ACTIVE':
             commercial.status = CommercialUploadStatus.ACTIVE
@@ -78,6 +83,7 @@ export class MediumSubscriptionMenuStrategy implements ICommercialMenuStrategy {
             break
           case 'PENDING_ANALYSIS':
             commercial.status = CommercialUploadStatus.PENDING_ANALYSIS
+            commercial.url = uploadedCommercial.url
             break
         }
         commercials.push(commercial)
@@ -97,6 +103,7 @@ export class MediumSubscriptionMenuStrategy implements ICommercialMenuStrategy {
       },
       {
         index: 2,
+        url: null,
         title: updatePlan,
         status: CommercialUploadStatus.BLOCKED
       }
@@ -109,7 +116,7 @@ export class ProSubscriptionMenuStrategy implements ICommercialMenuStrategy {
     let commercials: Commercial[] = []
     if (uploadedCommercials.length > 0) {
       for (let uploadedCommercial of uploadedCommercials) {
-        let commercial: Commercial = { status: CommercialUploadStatus.TO_UPLOAD, url: undefined }
+        let commercial: Commercial = { status: CommercialUploadStatus.TO_UPLOAD, url: null }
         switch (uploadedCommercial.status) {
           case 'ACTIVE':
             commercial.status = CommercialUploadStatus.ACTIVE
@@ -117,6 +124,7 @@ export class ProSubscriptionMenuStrategy implements ICommercialMenuStrategy {
             break
           case 'PENDING_ANALYSIS':
             commercial.status = CommercialUploadStatus.PENDING_ANALYSIS
+            commercial.url = uploadedCommercial.url
             break
         }
         commercials.push(commercial)

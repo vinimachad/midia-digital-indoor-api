@@ -1,13 +1,16 @@
 import { Prisma, RefreshToken } from '@prisma/client'
 import BaseRepository from '@repositories/abstract-repository'
 
-export interface IRefreshTokenRepository extends BaseRepository<Prisma.RefreshTokenCreateInput> {
+export interface IRefreshTokenRepository extends BaseRepository<Prisma.RefreshTokenCreateInput, RefreshToken> {
   findByUserId(user_id: string): Promise<RefreshToken[]>
   create(data: Prisma.RefreshTokenCreateInput): Promise<RefreshToken>
   findByUserIdAndToken(data: { user_id: string; refresh_token: string }): Promise<RefreshToken | null>
 }
 
-export default class RefreshTokenRepository extends BaseRepository<RefreshToken> implements IRefreshTokenRepository {
+export default class RefreshTokenRepository
+  extends BaseRepository<Prisma.RefreshTokenCreateInput, RefreshToken>
+  implements IRefreshTokenRepository
+{
   model: any
 
   constructor() {

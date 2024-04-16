@@ -1,5 +1,6 @@
 import { StreamingBlobPayloadInputTypes } from '@smithy/types'
 import aws from 'aws-sdk'
+import { randomUUID } from 'crypto'
 
 export type File = {
   name: string
@@ -42,7 +43,8 @@ export default class AWSManager {
 
   private async uploadFile(path: string, file: File) {
     let bucket = process.env.AWS_S3_BUCKET ?? ''
-    let fileName = file.name.replaceAll(' ', '')
+    let uuid = randomUUID()
+    let fileName = uuid + file.name.replaceAll(' ', '')
     let url = `https://${bucket}.s3.sa-east-1.amazonaws.com/${path}${fileName}`
 
     const bucketParams = {

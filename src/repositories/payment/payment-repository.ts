@@ -12,7 +12,7 @@ export interface IPaymentRepository {
 }
 
 export default class PaymentRepository
-  extends BaseRepository<Prisma.SubscriptionCreateInput>
+  extends BaseRepository<Prisma.SubscriptionCreateInput, Subscription>
   implements IPaymentRepository
 {
   model: any

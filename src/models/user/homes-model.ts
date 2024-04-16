@@ -9,6 +9,7 @@ import {
   MediumSubscriptionMenuStrategy,
   ProSubscriptionMenuStrategy
 } from './strategy/commercial-menu-strategy'
+import { ICommercialRepository } from '@repositories/commercial/commercial-repository'
 
 export interface IHomesModel {
   validateCommercialMenuBySubscription: (token: string) => Promise<CommercialUpload[]>
@@ -19,6 +20,7 @@ interface HomesModelDTO {
   userRepository: IUserRepository
   subscriptionRepository: IPaymentRepository
   stripeService: Payment.IPaymentService
+  commercialRepository: ICommercialRepository
 }
 
 export enum CommercialUploadStatus {
@@ -30,12 +32,18 @@ export enum CommercialUploadStatus {
 
 export type CommercialUpload = {
   index: number
-  url?: string
+  url: string | null
   title: string
   status: CommercialUploadStatus
 }
 
-export default ({ userRepository, subscriptionRepository, jwt, stripeService }: HomesModelDTO): IHomesModel => {
+export default ({
+  jwt,
+  stripeService,
+  userRepository,
+  commercialRepository,
+  subscriptionRepository
+}: HomesModelDTO): IHomesModel => {
   async function validateCommercialMenuBySubscription(token: string) {
     let { id: userId } = jwt.accessToken().verify(token)
     let user = await userRepository.findById(userId)
@@ -73,8 +81,8 @@ export default ({ userRepository, subscriptionRepository, jwt, stripeService }: 
       default:
         return []
     }
-
-    return menuStrategyContext.executeStrategy([])
+    let commercials = await commercialRepository.findManyByUserId(userId)
+    return menuStrategyContext.executeStrategy(commercials)
   }
 
   return {

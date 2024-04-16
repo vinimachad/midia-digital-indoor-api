@@ -91,7 +91,7 @@ model Subscription {
 }
 
 model Commercial {
-  id          String           @id
+  id          String           @id @default(uuid())
   index       Int
   title       String
   status      CommercialStatus @default(PENDING_ANALYSIS)
