@@ -6,8 +6,8 @@ import { IUserRepository } from '@repositories/user/user-reposiory'
 import {
   BasicSubscriptionMenuStrategy,
   CommercialMenuContext,
-  MediumSubscriptionMenuStrategy,
-  ProSubscriptionMenuStrategy
+  CommercialUploadStatus,
+  MediumOrProSubscriptionMenuStrategy
 } from './strategy/commercial-menu-strategy'
 import { ICommercialRepository } from '@repositories/commercial/commercial-repository'
 
@@ -21,13 +21,6 @@ interface HomesModelDTO {
   subscriptionRepository: IPaymentRepository
   stripeService: Payment.IPaymentService
   commercialRepository: ICommercialRepository
-}
-
-export enum CommercialUploadStatus {
-  ACTIVE = 'ACTIVE',
-  TO_UPLOAD = 'TO_UPLOAD',
-  BLOCKED = 'BLOCKED',
-  PENDING_ANALYSIS = 'PENDING_ANALYSIS'
 }
 
 export type CommercialUpload = {
@@ -73,10 +66,10 @@ export default ({
         menuStrategyContext.setStrategy(new BasicSubscriptionMenuStrategy())
         break
       case 'Pano Médio':
-        menuStrategyContext.setStrategy(new MediumSubscriptionMenuStrategy())
+        menuStrategyContext.setStrategy(new MediumOrProSubscriptionMenuStrategy('MEDIUM'))
         break
       case 'Plano Pro':
-        menuStrategyContext.setStrategy(new ProSubscriptionMenuStrategy())
+        menuStrategyContext.setStrategy(new MediumOrProSubscriptionMenuStrategy('PRO'))
         break
       default:
         return []
