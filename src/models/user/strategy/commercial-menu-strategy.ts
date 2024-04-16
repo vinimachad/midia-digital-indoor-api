@@ -23,7 +23,7 @@ export class CommercialMenuContext {
   }
 }
 
-type Commercial = { status: CommercialUploadStatus; url: string | null }
+type Commercial = { status: CommercialUploadStatus; url: string | null; newUploadAvailable: boolean }
 
 export enum CommercialUploadStatus {
   ACTIVE = 'ACTIVE',
@@ -34,6 +34,7 @@ export enum CommercialUploadStatus {
 
 const dropOrClick = 'Arraste e solte ou clique para adicionar uma propaganda'
 const updatePlan = 'Para adicionar uma nova propaganda  é preciso atualizar o seu plano'
+const minDifferenceDaysToNewUpload = 20
 const commercialStatusMapping: Record<CommercialStatus, CommercialUploadStatus> = {
   ACTIVE: CommercialUploadStatus.ACTIVE,
   PENDING_ANALYSIS: CommercialUploadStatus.PENDING_ANALYSIS
@@ -43,14 +44,18 @@ export class BasicSubscriptionMenuStrategy implements ICommercialMenuStrategy {
   createMenu(uploadedCommercials: UploadedCommercial[]): CommercialUpload[] {
     let commercial: Commercial = {
       status: CommercialUploadStatus.TO_UPLOAD,
+      newUploadAvailable: false,
       url: null
     }
 
     if (uploadedCommercials.length > 0) {
-      const { status, url } = uploadedCommercials[0]
+      const { status, url, created_at } = uploadedCommercials[0]
       if (status in commercialStatusMapping) {
+        const differenceInMilliseconds = new Date().getTime() - created_at.getTime()
+        const differenceInDays = differenceInMilliseconds / (1000 * 60 * 60 * 24)
         commercial.status = commercialStatusMapping[status]
         commercial.url = url
+        commercial.newUploadAvailable = differenceInDays >= minDifferenceDaysToNewUpload
       }
     }
 
@@ -64,12 +69,14 @@ export class BasicSubscriptionMenuStrategy implements ICommercialMenuStrategy {
         index: 1,
         url: null,
         title: updatePlan,
+        newUploadAvailable: false,
         status: CommercialUploadStatus.BLOCKED
       },
       {
         index: 2,
         url: null,
         title: updatePlan,
+        newUploadAvailable: false,
         status: CommercialUploadStatus.BLOCKED
       }
     ]
@@ -83,12 +90,15 @@ export class MediumOrProSubscriptionMenuStrategy implements ICommercialMenuStrat
     let commercials: Commercial[] = []
 
     if (uploadedCommercials.length > 0) {
-      for (let { status, url } of uploadedCommercials) {
-        let commercial: Commercial = { status: CommercialUploadStatus.TO_UPLOAD, url: null }
+      for (let { status, url, created_at } of uploadedCommercials) {
+        let commercial: Commercial = { status: CommercialUploadStatus.TO_UPLOAD, url: null, newUploadAvailable: false }
 
         if (status in commercialStatusMapping) {
+          const differenceInMilliseconds = created_at.getTime() - new Date().getTime()
+          const differenceInDays = differenceInMilliseconds / (1000 * 60 * 60 * 24)
           commercial.status = commercialStatusMapping[status]
           commercial.url = url
+          commercial.newUploadAvailable = differenceInDays >= minDifferenceDaysToNewUpload
         }
         commercials.push(commercial)
       }
@@ -105,11 +115,12 @@ export class MediumOrProSubscriptionMenuStrategy implements ICommercialMenuStrat
         title: dropOrClick,
         ...commercials[1]
       },
-      this.plan === 'PRO'
+      this.plan === 'MEDIUM'
         ? {
             index: 2,
             url: null,
             title: updatePlan,
+            newUploadAvailable: false,
             status: CommercialUploadStatus.BLOCKED
           }
         : {

@@ -28,6 +28,7 @@ export type CommercialUpload = {
   url: string | null
   title: string
   status: CommercialUploadStatus
+  newUploadAvailable: boolean
 }
 
 export default ({
