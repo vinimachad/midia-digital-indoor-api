@@ -84,14 +84,21 @@ export class BasicSubscriptionMenuStrategy implements ICommercialMenuStrategy {
 }
 
 export class MediumOrProSubscriptionMenuStrategy implements ICommercialMenuStrategy {
-  constructor(private plan: 'PRO' | 'MEDIUM') {}
+  private commercials: Commercial[]
 
-  createMenu(uploadedCommercials: UploadedCommercial[]): CommercialUpload[] {
-    let commercials: Commercial[] = []
+  constructor(private plan: 'PRO' | 'MEDIUM') {
+    this.commercials = [this.createDefaultCommercial(), this.createDefaultCommercial()]
+    if (plan === 'PRO') this.commercials.push(this.createDefaultCommercial())
+  }
 
+  private createDefaultCommercial() {
+    return { status: CommercialUploadStatus.TO_UPLOAD, url: null, newUploadAvailable: true }
+  }
+
+  public createMenu(uploadedCommercials: UploadedCommercial[]): CommercialUpload[] {
     if (uploadedCommercials.length > 0) {
-      for (let { status, url, created_at } of uploadedCommercials) {
-        let commercial: Commercial = { status: CommercialUploadStatus.TO_UPLOAD, url: null, newUploadAvailable: true }
+      for (let { status, url, created_at, index } of uploadedCommercials) {
+        let commercial: Commercial = this.createDefaultCommercial()
 
         if (status in commercialStatusMapping) {
           const differenceInDays = differenceDatesInDays(new Date(), created_at)
@@ -99,7 +106,7 @@ export class MediumOrProSubscriptionMenuStrategy implements ICommercialMenuStrat
           commercial.url = url
           commercial.newUploadAvailable = differenceInDays >= minDifferenceDaysToNewUpload
         }
-        commercials.push(commercial)
+        this.commercials[index] = commercial
       }
     }
 
@@ -107,12 +114,12 @@ export class MediumOrProSubscriptionMenuStrategy implements ICommercialMenuStrat
       {
         index: 0,
         title: dropOrClick,
-        ...commercials[0]
+        ...this.commercials[0]
       },
       {
         index: 1,
         title: dropOrClick,
-        ...commercials[1]
+        ...this.commercials[1]
       },
       this.plan === 'MEDIUM'
         ? {
@@ -125,7 +132,7 @@ export class MediumOrProSubscriptionMenuStrategy implements ICommercialMenuStrat
         : {
             index: 2,
             title: dropOrClick,
-            ...commercials[2]
+            ...this.commercials[2]
           }
     ]
   }

@@ -60,7 +60,7 @@ export default class ValidateMenuUseCase implements IValidateMenuUseCase {
       case 'Plano Básico':
         menuStrategyContext.setStrategy(new BasicSubscriptionMenuStrategy())
         break
-      case 'Pano Médio':
+      case 'Plano Médio':
         menuStrategyContext.setStrategy(new MediumOrProSubscriptionMenuStrategy('MEDIUM'))
         break
       case 'Plano Pro':
