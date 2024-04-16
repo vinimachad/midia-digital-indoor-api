@@ -8,38 +8,14 @@
     "rootDir": "src",
     "baseUrl": "./src",
     "paths": {
-      "@controllers/*": [
-        "./controllers/*"
+      "@shared/*": [
+        "./shared/*"
       ],
-      "@routes/*": [
-        "./routes/*"
-      ],
-      "@usecases/*": [
-        "./use-cases/*"
-      ],
-      "@entities/*": [
-        "./entities/*"
+      "@modules/*": [
+        "./modules/*"
       ],
       "@configs/*": [
         "./config/*"
-      ],
-      "@repositories/*": [
-        "./repositories/*"
-      ],
-      "@middlewares/*": [
-        "./middlewares/*"
-      ],
-      "@models/*": [
-        "./models/*"
-      ],
-      "@type/*": [
-        "./types/*"
-      ],
-      "@factories/*": [
-        "./factories/*"
-      ],
-      "@utils/*": [
-        "./utils/*"
       ]
     },
     "resolveJsonModule": true,

@@ -21,48 +21,16 @@
     "import/resolver": {
       "alias": [
         [
-          "@controllers",
-          "./src/controllers"
+          "@shared",
+          "./src/shared"
         ],
         [
-          "@routes",
-          "./src/routes"
-        ],
-        [
-          "@usecases",
-          "./src/use-cases"
-        ],
-        [
-          "@entities",
-          "./src/entities"
+          "@modules",
+          "./src/modules"
         ],
         [
           "@configs",
           "./src/config"
-        ],
-        [
-          "@repositories",
-          "./src/repositories"
-        ],
-        [
-          "@middlewares",
-          "./src/middlewares"
-        ],
-        [
-          "@models",
-          "./src/models"
-        ],
-        [
-          "@type",
-          "./src/types"
-        ],
-        [
-          "@factories",
-          "./src/factories"
-        ],
-        [
-          "@utils",
-          "./src/utils"
         ]
       ]
     }
