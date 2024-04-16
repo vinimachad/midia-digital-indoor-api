@@ -1,6 +1,6 @@
-import AppError from '@middlewares/error/error-model'
 import Stripe from 'stripe'
 import { Payment } from './types'
+import AppError from '@shared/middlewares/error/error-model'
 
 export const stripeKeys = {
   apiKey: process.env.STRIPE_API_KEY ?? '',

@@ -1,6 +1,6 @@
-import commercialRoutes from '@routes/commercial/commercial-routes'
-import linkMetadataRoutes from '@routes/link-medatada-routes'
-import userRoutes from '@routes/user/user-routes'
+import commercialRoutes from '@modules/commercial/routes'
+import linkMetadataRoutes from '@modules/link-metadata/routes'
+import userRoutes from '@modules/user/routes'
 import { Router } from 'express'
 
 const routes = Router()
