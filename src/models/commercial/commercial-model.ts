@@ -18,22 +18,16 @@ export default ({ aws, commercialRepository }: CommercialModelDTO): ICommercialM
       const commercials = await commercialRepository.findManyByUserId(data.userId)
       const selectedCommercial = commercials.find((commercial) => commercial.index === Number(data.index))
       const filePath = 'commercials/'
-
-      let { url, fileName } = (await aws.upload(filePath, {
-        name: data.file.name,
-        data: data.file.data
-      })) as UploadReturn
+      const { fileName, url } = await uploadFile(filePath)
 
       if (selectedCommercial) {
-        await commercialRepository.update(selectedCommercial.id, {
-          url: url,
-          title: data.title,
-          file_path: filePath,
-          file_name: fileName,
-          index: Number(data.index),
-          description: data.description
-        })
-        await aws.delete(filePath, selectedCommercial.file_name ?? '')
+        await updateAndDeleteOldCommercial(
+          selectedCommercial.id,
+          url,
+          filePath,
+          fileName,
+          selectedCommercial.file_name ?? ''
+        )
         return
       }
 
@@ -52,6 +46,31 @@ export default ({ aws, commercialRepository }: CommercialModelDTO): ICommercialM
         title: 'Ocorreu um erro',
         message: 'Tivemos um erro ao realizar o seu upload, tente novamente mais tarde'
       })
+    }
+
+    async function uploadFile(filePath: string) {
+      return (await aws.upload(filePath, {
+        name: data.file.name,
+        data: data.file.data
+      })) as UploadReturn
+    }
+
+    async function updateAndDeleteOldCommercial(
+      id: string,
+      url: string,
+      filePath: string,
+      fileName: string,
+      oldFileName: string
+    ) {
+      await commercialRepository.update(id, {
+        url: url,
+        title: data.title,
+        file_path: filePath,
+        file_name: fileName,
+        index: Number(data.index),
+        description: data.description
+      })
+      await aws.delete(filePath, oldFileName)
     }
   }
 
