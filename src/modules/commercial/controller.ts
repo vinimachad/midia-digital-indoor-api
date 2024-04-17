@@ -4,13 +4,16 @@ import { ICreateBannersUseCase } from './modules/banner/use-cases/create-banner'
 import { ICreateCommercialListUseCase } from './use-cases/create-commercial-list'
 import { ICreateReviewUseCase } from './use-cases/create-review'
 import { IListCommercialsUseCase } from './use-cases/list-commercials'
+import { ICompleteReviewUseCase } from './use-cases/complete-review'
+import { completeReviewSchema } from './schema'
 
 export default class CommercialController {
   constructor(
     private createBannersUseCase: ICreateBannersUseCase,
     private createCommercialListUseCase: ICreateCommercialListUseCase,
     private listCommercialsUseCase: IListCommercialsUseCase,
-    private createReviewUseCase: ICreateReviewUseCase
+    private createReviewUseCase: ICreateReviewUseCase,
+    private completeReviewUseCase: ICompleteReviewUseCase
   ) {}
 
   async create(req: Request, res: Response) {
@@ -42,5 +45,15 @@ export default class CommercialController {
       })
       res.json({ results })
     }
+  }
+
+  async completeReview(req: Request, res: Response) {
+    const {
+      body,
+      params: { id: commercial_id }
+    } = completeReviewSchema.parse(req)
+
+    await this.completeReviewUseCase.execute({ commercial_id, ...body })
+    res.status(204).send()
   }
 }

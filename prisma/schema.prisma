@@ -113,4 +113,5 @@ enum SubscriptionStatus {
 enum CommercialStatus {
   PENDING_ANALYSIS
   ACTIVE
+  REJECTED
 }

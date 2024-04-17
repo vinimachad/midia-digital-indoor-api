@@ -30,7 +30,8 @@ export enum CommercialUploadStatus {
   ACTIVE = 'ACTIVE',
   TO_UPLOAD = 'TO_UPLOAD',
   BLOCKED = 'BLOCKED',
-  PENDING_ANALYSIS = 'PENDING_ANALYSIS'
+  PENDING_ANALYSIS = 'PENDING_ANALYSIS',
+  REJECTED = 'REJECTED'
 }
 
 const dropOrClick = 'Arraste e solte ou clique para adicionar uma propaganda'
@@ -38,7 +39,8 @@ const updatePlan = 'Para adicionar uma nova propaganda  é preciso atualizar o s
 const minDifferenceDaysToNewUpload = 20
 const commercialStatusMapping: Record<CommercialStatus, CommercialUploadStatus> = {
   ACTIVE: CommercialUploadStatus.ACTIVE,
-  PENDING_ANALYSIS: CommercialUploadStatus.PENDING_ANALYSIS
+  PENDING_ANALYSIS: CommercialUploadStatus.PENDING_ANALYSIS,
+  REJECTED: CommercialUploadStatus.REJECTED
 }
 
 export class BasicSubscriptionMenuStrategy implements ICommercialMenuStrategy {

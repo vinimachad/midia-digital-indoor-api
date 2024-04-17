@@ -5,18 +5,19 @@ import CommercialRepository from './repository'
 import CreateCommercialListUseCase from './use-cases/create-commercial-list'
 import CreateReviewUseCase from './use-cases/create-review'
 import ListCommercialsUseCase from './use-cases/list-commercials'
+import CompleteReviewUseCase from './use-cases/complete-review'
 
 export default class CommercialFactory {
   static controller() {
+    const awsManager = new AWSManager()
+    const commercialRepository = new CommercialRepository()
+
     return new CommercialController(
       new CreateBannersUseCase(),
       new CreateCommercialListUseCase(),
       new ListCommercialsUseCase(),
-      this.createReviewUseCase()
+      new CreateReviewUseCase(awsManager, commercialRepository),
+      new CompleteReviewUseCase(commercialRepository)
     )
-  }
-
-  static createReviewUseCase() {
-    return new CreateReviewUseCase(new AWSManager(), new CommercialRepository())
   }
 }

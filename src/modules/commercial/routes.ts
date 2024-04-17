@@ -9,4 +9,5 @@ commercialRoutes.put('/update', (req, res) => controller.update(req, res))
 commercialRoutes.post('/create/banner', (req, res) => controller.create(req, res))
 commercialRoutes.get('/list', (req, res) => controller.list(req, res))
 commercialRoutes.post('/create/review', useAuthentication(), (req, res) => controller.createReview(req, res))
+commercialRoutes.post('/complete/review/:id', (req, res) => controller.completeReview(req, res))
 export default commercialRoutes
